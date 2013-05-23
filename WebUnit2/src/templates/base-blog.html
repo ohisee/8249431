@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{% block title%}{% endblock %}</title>
+		<link type="text/css" rel="stylesheet" href="/theme/main.css" />
+	</head>
+	<body>
+		<a href="/blog" class="main-title">Blog</a>
+		<div id="content">
+			{% block content %}
+			{% endblock %}
+		</div>
+		{% block age %}{% endblock %}
+	</body>
+</html>
