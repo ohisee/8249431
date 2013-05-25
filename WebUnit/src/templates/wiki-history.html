@@ -1,0 +1,22 @@
+{% extends "wiki-base.html" %}
+{% block title %}Wiki{% endblock %}
+{% block content %}
+
+	<div class="login-area">
+		{{username}}&nbsp;&#40;<a class="login-link" href={{logout_link}}>logout</a>&#41;
+	</div>
+	
+	<div class="wiki-content">
+		<table class='wiki-content-table'>
+		{% for wiki in wikilst %}
+			<tr style="background-color: {{wiki.style}}">
+				<td>{{wiki.get_created_date()}}</td>
+				<td>{{wiki.get_wiki_text()}}</td>
+				<td><a class="login-link" href='/'>view</a></td>
+				<td><a class="login-link" href='/'>edit</a></td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
+
+{% endblock %}
