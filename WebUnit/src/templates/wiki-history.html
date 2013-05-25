@@ -12,7 +12,7 @@
 			<tr style="background-color: {{wiki.style}}">
 				<td>{{wiki.get_created_date()}}</td>
 				<td>{{wiki.get_wiki_text()}}</td>
-				<td><a class="login-link" href='/'>view</a></td>
+				<td><a class="login-link" href='{{view_link % wiki.version}}'>view</a></td>
 				<td><a class="login-link" href='/'>edit</a></td>
 			</tr>
 		{% endfor %}

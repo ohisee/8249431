@@ -192,13 +192,18 @@ class WikiPageHandler(BaseHandler):
     def get(self, random_url):
         username_val = self.validateSecureCookie('user_id');
         wiki_text, lastStart = cacheWikiStr(random_url, '');
-        if username_val and wiki_text:
-            params = dict(loggedin = True, wiki_text = wiki_text, username = username_val, ev = 'edit', 
-                          ev_link = '/wiki/_edit%s' % random_url, logout_link = '/wiki/logout', 
-                          history = '/wiki/_history%s' % random_url);
-            self.render('wiki-display.html', **params);
-        elif username_val and not wiki_text:
-            self.redirect('/wiki/_edit%s' % random_url);
+        version = self.request.get('v');
+        if username_val:
+            if version:
+                pass
+            else:
+                if wiki_text:
+                    params = dict(loggedin = True, wiki_text = wiki_text, username = username_val, ev = 'edit', 
+                                  ev_link = '/wiki/_edit%s' % random_url, logout_link = '/wiki/logout', 
+                                  history = '/wiki/_history%s' % random_url);
+                    self.render('wiki-display.html', **params);
+                else:
+                    self.redirect('/wiki/_edit%s' % random_url);
         elif not username_val and wiki_text:
             params = dict(loggedin = False, wiki_text = wiki_text, login_link = '/blog/login', 
                           signup_link = '/blog/logout', history = '/wiki/_history%s' % random_url);
@@ -239,7 +244,7 @@ class WikiPageHistoryHandler(BaseHandler):
         if self.user:
             wiki_lst = cacheWiki(path, '');
             if wiki_lst:
-                self.render('wiki-history.html', wikilst = wiki_lst, 
+                self.render('wiki-history.html', wikilst = wiki_lst, view_link = path +'?v=%s',
                             username = self.user.user_name, logout_link = '/wiki/logout/');
         else:
             self.redirect('/blog/login');
