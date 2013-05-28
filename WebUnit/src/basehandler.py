@@ -5,6 +5,7 @@
 import os;
 import webapp2;
 import jinja2;
+import json;
 from validate import check_secure_val, make_secure_val;
 from usermodel import BlogUser;
 
@@ -27,11 +28,15 @@ class BaseHandler(webapp2.RequestHandler):
         self.response.out.write(*a, **kw);
     
     def render(self, template, **templateArgs):
+        templateArgs['user'] = self.user;
         templateArgs['gray_style'] = gray_style;
         self.write(self.render_str(template, **templateArgs));
         
     def deleteCookie(self, cookie_name):
         self.response.headers.add_header('Set-Cookie', '%s=; Path=%s' % (str(cookie_name), '/'));
+        
+    def logout(self):
+        self.deleteCookie('user_id');
         
     def setSecureCookie(self, cookie_name, cookie_val):
         new_cookie_val = make_secure_val(cookie_val);
@@ -43,10 +48,15 @@ class BaseHandler(webapp2.RequestHandler):
     
     def setJsonHeader(self):
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8';
+    
+    def render_json(self, data):
+        json_txt = json.dumps(data);
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8';
+        self.write(json_txt);
         
     def pageNotfound(self):
-        self.error(500);
-        self.write('<p>500 error</p>Page not found.');
+        self.error(404);
+        self.write('<h1>404: Page Not Found Error</h1><p>Page does not exist.</p>');
         
     def nextUrl(self):
         return self.request.headers.get('referer', '/');

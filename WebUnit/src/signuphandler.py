@@ -62,6 +62,7 @@ class LoginHandler(BaseHandler):
         username = self.request.get("username");
         password = self.request.get("password");
         have_error = False;
+        next_url = self.nextUrl();
         
         params = dict(username = username, password = password);
         
@@ -74,6 +75,8 @@ class LoginHandler(BaseHandler):
             self.render('login-form.html', **params);
         else:
             self.setSecureCookie('user_id', username);
+            if next_url:
+                self.redirect(next_url);
             self.redirect('/blog/welcome');  
             
 '''
@@ -81,7 +84,7 @@ class LoginHandler(BaseHandler):
 ''' 
 class LogoutHandler(BaseHandler):
     def get(self):
-        self.deleteCookie('user_id');
+        self.logout();
         self.redirect('/blog/signup');   
                      
 '''

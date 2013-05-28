@@ -8,7 +8,7 @@ class WikiPage(object):
         self.wiki_text = wiki_text;
         self.url_path = url_path;
         self.version = 1;
-        self.created_date = datetime.utcnow();
+        self.created_date = datetime.now();
         
     #
     # Return first 100 characters
@@ -25,9 +25,6 @@ class WikiPage(object):
     def set_wiki_version(self, version):
         if version:
             self.version = version;
-    
-    def set_style(self, style):
-        self.style = style;
     
     def same_path(self, url_path):
         return self.url_path == url_path;

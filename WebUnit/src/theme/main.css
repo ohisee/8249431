@@ -120,10 +120,11 @@ input[type=submit] {
 }
 
 .wiki-content {
-    margin-top: 19px;
+    margin-top: 25px;
     overflow: auto;
 }
 
 .wiki-content-table {
-	width: 700px;
+	width: 720px;
+	border-collapse: separate;
 }

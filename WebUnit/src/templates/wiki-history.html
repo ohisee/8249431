@@ -7,16 +7,29 @@
 	</div>
 	
 	<div class="wiki-content">
-		<table class='wiki-content-table'>
+		<table class='wiki-content-table' id='wiki-content'>
 		{% for wiki in wikilst %}
-			<tr style="background-color: {{wiki.style}}">
+			<tr>
 				<td>{{wiki.get_created_date()}}</td>
 				<td>{{wiki.get_wiki_text()}}</td>
 				<td><a class="login-link" href='{{view_link % wiki.version}}'>view</a></td>
-				<td><a class="login-link" href='/'>edit</a></td>
+					{% if loggedin %}
+					<td><a class="login-link" href='{{update_link % wiki.version}}'>edit</a></td>
+					{% endif %}
 			</tr>
 		{% endfor %}
 		</table>
 	</div>
+	
+	<script type="text/javascript">
+	<!--
+		var wikiTableRows = document.getElementById('wiki-content').rows;
+		var bgColor;
+		for (var i = 0; i < wikiTableRows.length; i++) {
+			bgColor = (i % 2 == 0) ? '#FFFFFF' : '#D3D3D3';
+			wikiTableRows[i].style.backgroundColor = bgColor;
+		}
+	//-->
+	</script>
 
 {% endblock %}
