@@ -11,8 +11,8 @@
 		<table class='wiki-content-table' id='wiki-content'>
 		{% for wiki in wikilst %}
 			<tr>
-				<td>{{wiki.get_created_date()}}</td>
-				<td>{{wiki.get_wiki_text()[:100]}}</td>
+				<td class="date-cell">{{wiki.get_created_date()}}</td>
+				<td>{{wiki.get_wiki_text()[:50]}}</td>
 				<td><a class="login-link" href="{{view_link % wiki.version}}">view</a></td>
 					{% if loggedin %}
 					<td><a class="login-link" href="{{update_link % wiki.version}}">edit</a></td>

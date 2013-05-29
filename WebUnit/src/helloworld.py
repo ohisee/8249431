@@ -12,13 +12,13 @@ from newposthandler import NewPostHandler, ListBlogHandler, BlogLinkPageHandler,
 # The arbitrary paths page url must be last in the url mapping table.
 #
 ARBITRARY_PATHS_PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
-app = webapp2.WSGIApplication([#('/', MainPage), 
+app = webapp2.WSGIApplication([('/', MainPage), 
                                ('/signup', SignupHandler),
                                ('/login', LoginHandler),
                                ('/logout', WikiPageLogoutHandler),
                                ('/_edit' + ARBITRARY_PATHS_PAGE_RE, EditWikiHandler),
                                ('/_history' + ARBITRARY_PATHS_PAGE_RE, WikiPageHistoryHandler),
-                               #('/unit2/rot13', ApplyRot13Handler),
+                               ('/unit2/rot13', ApplyRot13Handler),
                                #('/unit2/signup', SignupHandler),
                                ('/blog/signup', SignupHandler),
                                #('/unit2/welcome', WelcomeHandler),

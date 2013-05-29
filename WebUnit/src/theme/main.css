@@ -1,5 +1,10 @@
+html {
+	height: 100%;
+}
+
 body {
     position: relative;
+    height: 100%;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 14px;
 
@@ -128,11 +133,24 @@ input[type=submit] {
 }
 
 .wiki-content {
-    margin-top: 25px;
+    margin-top: 30px;
     overflow: auto;
+}
+
+.wiki-content textarea {
+	width: 750px;
+	height: 400px;
+	font-size: 17px;
+	font-family: monospace;
 }
 
 .wiki-content-table {
 	width: 100%;
 	border-collapse: separate;
+}
+
+.wiki-content-table .date-cell {
+	width: 190px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
