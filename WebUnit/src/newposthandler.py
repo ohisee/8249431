@@ -237,7 +237,7 @@ class WikiPageHandler(BaseHandler):
                               signup_link = '/signup', history = '/wiki/_history%s' % random_url);
                 self.render('wiki-display.html', **params);
             else:
-                self.redirect('/login');
+                self.redirect('/wiki/_edit%s' % random_url);
     
 class WikiPageLogoutHandler(BaseHandler):
     def get(self):
