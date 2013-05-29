@@ -12,11 +12,14 @@ from newposthandler import NewPostHandler, ListBlogHandler, BlogLinkPageHandler,
 # The arbitrary paths page url must be last in the url mapping table.
 #
 ARBITRARY_PATHS_PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
-app = webapp2.WSGIApplication([('/', MainPage), 
-                               ('/unit2/rot13', ApplyRot13Handler),
+app = webapp2.WSGIApplication([#('/', MainPage), 
+                               ('/sign', SignupHandler),
+                               ('/login', LoginHandler),
+                               ('/logout', WikiPageLogoutHandler),
+                               #('/unit2/rot13', ApplyRot13Handler),
                                #('/unit2/signup', SignupHandler),
                                ('/blog/signup', SignupHandler),
-                               ('/unit2/welcome', WelcomeHandler),
+                               #('/unit2/welcome', WelcomeHandler),
                                ('/blog/welcome', WelcomeHandler),
                                ('/blog/login', LoginHandler),
                                ('/blog/logout', LogoutHandler),

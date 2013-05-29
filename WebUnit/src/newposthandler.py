@@ -227,24 +227,20 @@ class WikiPageHandler(BaseHandler):
 
             if wiki_text:
                 params = dict(loggedin = True, wiki_text = wiki_text, username = self.user.user_name, ev = 'edit', 
-                              ev_link = ev_link, logout_link = '/wiki/logout', history = '/wiki/_history%s' % random_url);
+                              ev_link = ev_link, logout_link = '/logout', history = '/wiki/_history%s' % random_url);
                 self.render('wiki-display.html', **params);
             else:
                 self.redirect('/wiki/_edit%s' % random_url);
         else:
             if wiki_text:
-                params = dict(loggedin = False, wiki_text = wiki_text, login_link = '/blog/login', 
-                              signup_link = '/blog/signup', history = '/wiki/_history%s' % random_url);
+                params = dict(loggedin = False, wiki_text = wiki_text, login_link = '/login', 
+                              signup_link = '/signup', history = '/wiki/_history%s' % random_url);
                 self.render('wiki-display.html', **params);
             else:
-                self.redirect('/blog/login');
+                self.redirect('/login');
     
 class WikiPageLogoutHandler(BaseHandler):
     def get(self):
-        
-        import logging;
-        logging.info("in wiki page logout handler");
-        
         next_url = self.nextUrl();
         self.logout();
         self.redirect(next_url);
@@ -264,13 +260,9 @@ class EditWikiHandler(BaseHandler):
 
             self.render('wiki-form.html', wiki_text = wiki_text if wiki_text else '', ev_link = view_url, 
                         username = self.user.user_name, history = '/wiki/_history%s' % random_url, 
-                        logout_link = '/wiki/logout');
+                        logout_link = '/logout');
         else:
-            
-            import logging;
-            logging.info("in edit wiki page no user");
-            
-            self.redirect('/blog/login');
+            self.redirect('/login');
                             
         
     def post(self, random_url):
@@ -302,6 +294,6 @@ class WikiPageHistoryHandler(BaseHandler):
             if wiki_lst:
                 self.render('wiki-history.html', loggedin = True, wikilst = wiki_lst, view_link = path +'?v=%s',
                             update_link = '/wiki/_edit' + path + '?v=%s', 
-                            username = self.user.user_name, logout_link = '/wiki/logout');
+                            username = self.user.user_name, logout_link = '/logout');
         else:
-            self.redirect('/blog/login');
+            self.redirect('/login');
