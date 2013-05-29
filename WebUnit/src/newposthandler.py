@@ -234,12 +234,17 @@ class WikiPageHandler(BaseHandler):
         else:
             if wiki_text:
                 params = dict(loggedin = False, wiki_text = wiki_text, login_link = '/blog/login', 
-                              signup_link = '/blog/logout', history = '/wiki/_history%s' % random_url);
+                              signup_link = '/blog/signup', history = '/wiki/_history%s' % random_url);
                 self.render('wiki-display.html', **params);
-            self.redirect('/blog/login');                 
+            else:
+                self.redirect('/blog/login');
     
 class WikiPageLogoutHandler(BaseHandler):
     def get(self):
+        
+        import logging;
+        logging.info("in wiki page logout handler");
+        
         next_url = self.nextUrl();
         self.logout();
         self.redirect(next_url);
@@ -261,6 +266,10 @@ class EditWikiHandler(BaseHandler):
                         username = self.user.user_name, history = '/wiki/_history%s' % random_url, 
                         logout_link = '/wiki/logout');
         else:
+            
+            import logging;
+            logging.info("in edit wiki page no user");
+            
             self.redirect('/blog/login');
                             
         

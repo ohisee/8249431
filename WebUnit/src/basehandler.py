@@ -37,6 +37,9 @@ class BaseHandler(webapp2.RequestHandler):
         
     def logout(self):
         self.deleteCookie('user_id');
+    
+    def login(self, username):
+        self.setSecureCookie('user_id', username);
         
     def setSecureCookie(self, cookie_name, cookie_val):
         new_cookie_val = make_secure_val(cookie_val);

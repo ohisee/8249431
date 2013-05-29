@@ -6,7 +6,8 @@ from basehandler import BaseHandler;
 from xml.dom import minidom;
 from urllib2 import URLError
 
-GMAPS_URL = "http://maps.googleapis.com/maps/api/staticmap?size=380x263&sensor=false&"
+GMAPS_URL = "http://maps.googleapis.com/maps/api/staticmap?size=380x263&sensor=false&";
+GMAPS_D_URL = "http://maps.googleapis.com/maps/api/staticmap?size=380x263&maptype=roadmap&markers=size:mid%7Ccolor:red%7CSan+Francisco,CA%7COakland,CA%7CSan+Jose,CA&sensor=false";
 def gmaps_img(points):
     m = '&'.join("markers=%s,%s" % (p[0], p[1]) for p in points);
     return GMAPS_URL + m;
@@ -39,4 +40,6 @@ class MainPage(BaseHandler):
         points = get_coordinates(self.request.remote_addr);        
         if points:
             image_url = gmaps_img(points);
+        else:
+            image_url = GMAPS_D_URL;
         self.render("front.html", image_url = image_url);

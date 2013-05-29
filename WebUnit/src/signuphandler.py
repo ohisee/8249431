@@ -53,16 +53,33 @@ class SignupHandler(BaseHandler):
     
 '''
 /blog/login
+/login
 ''' 
 class LoginHandler(BaseHandler):
     def get(self):
-        self.render("login-form.html");
+        
+        import logging;
+        
+        logging.info('in login handler get');
+        
+        next_url1 = self.request.headers.get('referer', '/');
+        
+        logging.info('------------------------ ' + next_url1);
+        
+        self.render("login-form.html", next_url = next_url1);
     
     def post(self):
+        
+        import logging;
+        
+        logging.info('in login handler');
+        
         username = self.request.get("username");
         password = self.request.get("password");
         have_error = False;
-        next_url = self.nextUrl();
+        next_url = str(self.request.get('next_url'));
+        if not next_url:
+            next_url = '/blog/welcome';
         
         params = dict(username = username, password = password);
         
@@ -74,10 +91,9 @@ class LoginHandler(BaseHandler):
         if have_error:
             self.render('login-form.html', **params);
         else:
-            self.setSecureCookie('user_id', username);
-            if next_url:
-                self.redirect(next_url);
-            self.redirect('/blog/welcome');  
+            self.login(username);
+            self.redirect(next_url);
+ 
             
 '''
 /blog/logout
