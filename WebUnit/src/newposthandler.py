@@ -238,7 +238,7 @@ class WikiPageHandler(BaseHandler):
                               signup_link = '/signup', history = '/wiki/_history%s' % random_url);
                 self.render('wiki-display.html', **params);
             else:
-                self.redirect('/wiki/_edit%s' % random_url);
+                self.redirect('/login?l=' + random_url);
     
 class WikiPageLogoutHandler(BaseHandler):
     def get(self):
@@ -263,11 +263,11 @@ class EditWikiHandler(BaseHandler):
                         username = self.user.user_name, history = '/wiki/_history%s' % random_url, 
                         logout_link = '/logout');
         else:
-            self.redirect('/login?l=' + random_url);
+            self.redirect('/login');
         
     def post(self, random_url):
         if self.user:
-            wiki_text = self.request.get('wiki_text');
+            wiki_text = self.request.get('content');
             version = self.request.get('v');
             redirect_url = random_url;
             if wiki_text:

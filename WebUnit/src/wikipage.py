@@ -13,7 +13,7 @@ class WikiPage(object):
     # Return first 100 characters
     #
     def get_wiki_text(self):
-        return self.wiki_text[0:100];
+        return self.wiki_text;
     
     def get_url_path(self):
         return self.url_path;

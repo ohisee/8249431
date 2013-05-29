@@ -30,6 +30,14 @@ body {
     text-decoration: underline;
 }
 
+.control-area {
+	float: right;
+}
+
+.control-area + .control-area {
+	margin-right: 19px;
+}
+
 h2 {
     font-size: 24px;
     font-weight: bold;
@@ -125,6 +133,6 @@ input[type=submit] {
 }
 
 .wiki-content-table {
-	width: 720px;
+	width: 100%;
 	border-collapse: separate;
 }
