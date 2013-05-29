@@ -57,8 +57,13 @@ class SignupHandler(BaseHandler):
 ''' 
 class LoginHandler(BaseHandler):
     def get(self):
-        next_url = self.request.headers.get('referer', '/');
-        self.render("login-form.html", next_url = next_url);
+        l = self.request.get('l');
+        if l:
+            self.render("login-form.html", next_url = l);
+        else:
+            next_url = self.nextUrl();
+            self.render("login-form.html", next_url = next_url);
+        
     
     def post(self):
         username = self.request.get("username");

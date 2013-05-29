@@ -38,8 +38,12 @@
 				
 			</table>
 			<input type="submit" value="Submit" name="submit">
-			<input type="hidden" name="next_url" value="{{next_url}}"/>
+			<input type="hidden" name="next_url" value="{{next_url}}">
 		</form>
+		
+		<script type="text/javascript">
+		window.alert('referrer URL : ' + document.referrer);
+		</script>
 	
 	</body>
 </html>

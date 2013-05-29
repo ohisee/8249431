@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 #
 # New post handler
 #
@@ -262,8 +263,7 @@ class EditWikiHandler(BaseHandler):
                         username = self.user.user_name, history = '/wiki/_history%s' % random_url, 
                         logout_link = '/logout');
         else:
-            self.redirect('/login');
-                            
+            self.redirect('/login?l=' + random_url);
         
     def post(self, random_url):
         if self.user:
