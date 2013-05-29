@@ -13,7 +13,7 @@ from newposthandler import NewPostHandler, ListBlogHandler, BlogLinkPageHandler,
 #
 ARBITRARY_PATHS_PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 app = webapp2.WSGIApplication([#('/', MainPage), 
-                               ('/sign', SignupHandler),
+                               ('/signup', SignupHandler),
                                ('/login', LoginHandler),
                                ('/logout', WikiPageLogoutHandler),
                                #('/unit2/rot13', ApplyRot13Handler),
