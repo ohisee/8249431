@@ -330,25 +330,63 @@ accepting2 = [2]
 # over all of the keys in the mapping (i.e., over all of the (state,letter)
 # pairs) -- you'll have to write "edges[edge]" to get the destination list. 
 
+edges4 = {(1, 'a'): [2],
+          (3, 'b'): [4]}
+
+accepting4 = [4]
+
+#def nfsmaccepts(current, edges, accepting, visited):
+#    #print ('Current state %s ' % current);
+#    if current in accepting:
+#        return "";
+#    else:
+#        visited = [];
+#        visited.append(current);
+#        for edge in edges:
+#            if current == edge[0]:
+#                letter = edge[1];
+#                states = edges[edge];
+#                #print ('Next States %s' % states);
+#                #print ('Letter is %s' % letter);
+#                for state in states:
+#                    if state not in visited:
+#                        r = nfsmaccepts(state, edges, accepting, visited);
+#                        if r is not None:
+#                            print ('returning %s', (letter + r));
+#                            return letter + r;
+#                        #return None;
+#                    else:
+#                        return None;
+
+#edges = {(1,'a') : [2],
+#         (1,'b') : [3],
+#         (2,'c') : [4],
+#         (3,'d') : [5],
+#         (5,'c') : [2],
+#         (5,'f') : [6],
+#         (5,'g') : [1]}
+#
+#accepting = [6]
+       
 def nfsmaccepts(current, edges, accepting, visited):
     if current in accepting:
-        return "*";
+        return "";
+    if current in visited:
+        return None;
     else:
-        s = [];
-        if current not in visited:
-            for edge in edges:
-                if current == edge[0]:
-                    print ('Current state %s ' % current);
-                    visited.append(current);
-                    states = edges[edge];
-                    print ('Next States %s' % states);
-                    for state in states:
-                        if current not in accepting and current != state:
-                            s.append(edge[1]);
-                        nfsmaccepts(state, edges, accepting, visited);
-                        #s.append(r);
-                        print ('Input %s' % s);
-        return ''.join(s);
-                        
+        visited.append(current);
+        for edge in edges:
+            if current == edge[0]:
+                letter = edge[1];
+                states = edges[edge];
+                for state in states:
+                    if state not in visited:
+                        r = nfsmaccepts(state, edges, accepting, visited);
+                        if r is not None:
+                            return letter + r;
+        return None;
+
 print (nfsmaccepts(1, edges, accepting, []));
+#print (nfsmaccepts(1, edges, [2], []));
+#print (nfsmaccepts(1, edges4, accepting4, []));
                 
