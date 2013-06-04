@@ -389,4 +389,7 @@ def nfsmaccepts(current, edges, accepting, visited):
 print (nfsmaccepts(1, edges, accepting, []));
 #print (nfsmaccepts(1, edges, [2], []));
 #print (nfsmaccepts(1, edges4, accepting4, []));
+
+print (re.findall(r'"(?:[^"])*"', '"sumerian writing"'));
+print (re.findall(r'[^<> ]+', "'species',"));
                 
