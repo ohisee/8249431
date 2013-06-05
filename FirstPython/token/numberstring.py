@@ -55,7 +55,7 @@ tokens = (
 t_ignore                = ' \t\v\r' # whitespace 
 
 def t_IDENTIFIER(token):
-    r'[A-Za-z]+(?:_*[A-Za-z]+)'
+    r'[A-Za-z]+(?:_*[A-Za-z]+)*'
     token.type = 'IDENTIFIER';
     return token;
 
@@ -65,7 +65,7 @@ def t_NUMBER(token):
     return token;
 
 def t_STRING(token):
-    r'"(?:\\".)*"'
+    r'"(?:[^"\\]|(?:\\.))*"'
     token.value = token.value[1:-1];
     return token;
 
@@ -95,9 +95,11 @@ input1 = 'some_identifier -12.34 "a \\"escape\\" b"'
 output1 = ['IDENTIFIER', 'some_identifier', 'NUMBER', -12.34, 'STRING', 
 'a \\"escape\\" b']
 print test_lexer(input1) == output1
+print (test_lexer(input1))
 
 
 input2 = '-12x34' 
 output2 = ['NUMBER', -12.0, 'IDENTIFIER', 'x', 'NUMBER', 34.0]
 print test_lexer(input2) == output2
+print (test_lexer(input2))
 

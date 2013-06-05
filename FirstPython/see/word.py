@@ -445,5 +445,5 @@ print (re.findall(r'[A-Za-z]+\@[A-Za-z]+(?:\.[A-Za-z]+)+', input1));
 emails = re.findall(r'[A-Za-z]+\@[A-Za-z]+(?:\.[A-Za-z]+)+', input1);
 print ([email.replace('NOSPAM', '') for email in emails]);
 
-print (re.findall(r'"(?:[^"]|(?:\.))*"', '"I say, \"hello.\" \"hello.\"'));
+print (re.findall(r'"(?:[^"\\]|(?:\\.))*"', '"I say, \"hello.\" \"hello.\"'));
                 
