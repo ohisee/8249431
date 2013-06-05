@@ -392,4 +392,58 @@ print (nfsmaccepts(1, edges, accepting, []));
 
 print (re.findall(r'"(?:[^"])*"', '"sumerian writing"'));
 print (re.findall(r'[^<> ]+', "'species',"));
+print (re.findall(r'[A-Za-z]+(?:_*[A-Za-z]+)', '_underscore'));
+print (re.findall(r'-?[0-9]+\.?[0-9]*', '-123.1.1.'));
+
+# Bonus Practice: Find Max
+
+# This assignment is not graded and we encourage you to experiment. Learning is
+# fun!
+
+# Given a list l and a function f, return the element of l that maximizes f.
+
+# Assume:
+#    l is not empty
+#    f returns a number
+
+# Example:
+
+l = ['Barbara', 'kingsolver', 'wrote', 'The', 'Poisonwood','Bible']
+f = len
+
+#l = [-4, -3, 2, 1]
+#f = abs
+
+# Try it on your own!
+
+def find_max(f, l):
+    ind, m = 0, 0;
+    for i in range(0, len(l)):
+        if f(l[i]) > m:
+            m, ind = f(l[i]), i;
+    return l[ind];
+
+def findmax(f, l):
+    return max(l, key=f);
+
+def lpos(word):
+    return word.find("l");
+        
+print (find_max(f, l));
+print (find_max(lambda(word): word.find("l"), l));
+print(ord('c'));
+print ('0x1d'[2:]);
+print (0xFFFF);
+print (range(3, -1, -1));
+print (int(6));
+print (re.findall(r'0x[0-9A-Fa-f]+', '0x0x0x'));
+input1 = """louiseNOSPAMaston@germany.de (1814-1871) was an advocate for
+democracy. irmgardNOSPAMkeun@NOSPAMweimar.NOSPAMde (1905-1982) wrote about
+the early nazi era. rahelNOSPAMvarnhagen@berlin.de was honored with a 1994
+deutsche bundespost stamp. seti@home is not actually an email address."""
+print (re.findall(r'[A-Za-z]+\@[A-Za-z]+(?:\.[A-Za-z]+)+', input1));
+emails = re.findall(r'[A-Za-z]+\@[A-Za-z]+(?:\.[A-Za-z]+)+', input1);
+print ([email.replace('NOSPAM', '') for email in emails]);
+
+print (re.findall(r'"(?:[^"]|(?:\.))*"', '"I say, \"hello.\" \"hello.\"'));
                 

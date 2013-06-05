@@ -1,4 +1,5 @@
 import re;
+import ply.lex as lex;
 
 # Specifying Tokens
 
@@ -53,10 +54,6 @@ import re;
 # LexToken(WORD,'webpage!',2,14)
 
 
-webpage = """This is
-   <b>webpage!"""
-
-
 
 #import ply.lex as lex
 
@@ -68,7 +65,24 @@ tokens = ('LANGLE', # <
           'WORD', # Welcome!
           )
 
+states = (
+          ('htmlcomment', 'exclusive'),
+          );
+
 t_ignore = ' ' # shortcut for whitespace
+
+#HTML comment codes must be at top (first)
+def t_htmlcomment(token):
+    r'<!--';
+    token.lexer.begin('htmlcomment');
+    
+def t_htmlcomment_end(token):
+    r'-->';
+    token.lexer.lineno += token.value.count('\n'); #must be in one line
+    token.lexer.begin('INITIAL');
+    
+def t_htmlcomment_error(token):
+    token.lexer.skip(1);
 
 def t_newline(token):
     r'\n'
@@ -101,13 +115,67 @@ def t_WORD(token):
     return token
 
 
+# Identifier
 
-#htmllexer = lex.lex()
-#htmllexer.input(webpage)
-#while True:
-#    tok = htmllexer.token()
-#    if not tok: break
-#    print tok
+# Identifiers are textual string descriptions that refer to program elements,
+# such as variables and functions. Write a indentifier token rule for Javascript identifiers.
+
+# The token rule should match:
+
+#   factorial
+#   underscore_separated
+#   mystery
+#   ABC
+
+# The token rule should not match:
+
+#   _starts_wrong
+#   123
+
+
+def t_IDENTIFIER(token):
+    #r'[A-Za-z]+(?:_*[A-Za-z]+)'
+    r'[A-Za-z][A-Za-z_]*'
+    return token
+
+# Numbers
+
+# Write a indentifier token rule for Javascript numbers that converts the value
+# of the token to a float.
+
+# The token rule should match:
+
+#    12
+#    5.6
+#    -1.
+#    3.14159
+#    -8.1
+#    867.5309
+
+# The token rule should not match:
+
+#    1.2.3.4
+#    five
+#    jenny
+
+def t_NUMBER(token):
+    #r'-?[0-9]+\.?[0-9]*';
+    r'-?[0-9]+(?:\.[0-9]*)?';
+    token.value = float(token.value);
+    return token;
+
+def t_eolcomment(token):
+    r'//[^\n]*';
+    pass;
+
+
+webpage = """This is <!-- comment --><b>webpage!"""
+htmllexer = lex.lex()
+htmllexer.input(webpage)
+while True:
+    tok = htmllexer.token()
+    if not tok: break
+    print tok
 
 
 
