@@ -367,7 +367,7 @@ accepting4 = [4]
 #         (5,'g') : [1]}
 #
 #accepting = [6]
-       
+
 def nfsmaccepts(current, edges, accepting, visited):
     if current in accepting:
         return "";
@@ -446,4 +446,17 @@ emails = re.findall(r'[A-Za-z]+\@[A-Za-z]+(?:\.[A-Za-z]+)+', input1);
 print ([email.replace('NOSPAM', '') for email in emails]);
 
 print (re.findall(r'"(?:[^"\\]|(?:\\.))*"', '"I say, \"hello.\" \"hello.\"'));
-                
+
+edges11 = { (1,'a') : [1] ,
+           (1,'b') : [2] ,
+           (2,'b') : [3] ,
+           (3,'b') : [4] ,
+           (8,'z') : [9] , } 
+accepting11 = [ 3 ] 
+print (nfsmaccepts(1, edges11, accepting11, []));
+
+edg1 = {(1, 'a') : [1], (1, 'b') : [2], (1, 'c') : [2], (1, 'd') : [2]};
+edg2 = {(1, 'b') : [2], (1, 'a') : [1]};
+for ed in edg1:
+    if ed[0] == 1:
+        print ed;
