@@ -227,27 +227,46 @@ print (gcd_l(24, 8));
 
 def make_new_nfsm(start_state, edges, accepting, visited, new_edges, new_accepting):
     for edge in edges:
-        visited.append(edge);
-        for state in edges[edge]:
-            if state in accepting:
-                new_accepting.append(state);
-                new_edges[edge] = new_accepting;
-    return None, None;
-                    
+        if start_state == edge[0] and edge not in visited:
+            visited.append(edge);
+            states = edges[edge];
+            for state in states:
+                if state in accepting:
+                    new_accepting.append(state);
+                    new_edges[edge] = new_accepting;
+                r = make_new_nfsm(state, edges, accepting, visited, new_edges, new_accepting);
+    return None;                 
     
+def check_state_existence(edges, edge, state):
+    for e in edges:
+        if state == e[0] and e != edge:
+            return True;
+    return False;
+
+def filter_down(edges, accepting):
+    new_edges = {};
+    for edge in edges:
+        states = edges[edge];
+        for state in states:
+            if check_state_existence(edges, edge, state):
+                if edge in new_edges:
+                    r = new_edges[edge];
+                    r.append(state);
+                else:
+                    r = [];
+                    r.append(state);
+                    new_edges[edge] = r;
+    return new_edges;
 
 def nfsmtrim(edges, accepting):
     # Write your code here.
-    start_state = 1;
-    new_edges = {};
-    for edge in edges:
-        if start_state == edge[1]:
-            destination_states = edges[edge];
-            for state in destination_states:
-                if state in accepting:
-                    new_edges[edge] = state;
-            
-    return None;
+    new_edges = filter_down(edges, accepting);
+    new_accepting = [];
+    r = [e for e, s in new_edges.items()];
+    for st in accepting:
+        if st in r:
+            new_accepting.append(st);
+    return (new_edges, new_accepting);
         
     
 
@@ -264,29 +283,29 @@ edges1 = { (1,'a') : [1] ,
            (8,'z') : [9] , } 
 accepting1 = [ 1 ] 
 (new_edges1, new_accepting1) = nfsmtrim(edges1,accepting1) 
-print new_edges1
-print new_edges1 == {(1, 'a'): [1]}
-print new_accepting1 == [1] 
+print (new_edges1)
+#print new_edges1 == {(1, 'a'): [1]}
+#print new_accepting1 == [1] 
 
-(new_edges2, new_accepting2) = nfsmtrim(edges1,[]) 
-print new_edges2 == {}
-print new_accepting2 == [] 
-
-(new_edges3, new_accepting3) = nfsmtrim(edges1,[3,6]) 
-print new_edges3 == {(1, 'a'): [1], (1, 'b'): [2], (2, 'b'): [3]}
-print new_accepting3 == [3]
-
-edges4 = { (1,'a') : [1] ,
-           (1,'b') : [2,5] ,
-           (2,'b') : [3] ,
-           (3,'b') : [4] ,
-           (3,'c') : [2,1,4] } 
-accepting4 = [ 2 ] 
-(new_edges4, new_accepting4) = nfsmtrim(edges4, accepting4) 
-print new_edges4 == { 
-  (1, 'a'): [1],
-  (1, 'b'): [2], 
-  (2, 'b'): [3], 
-  (3, 'c'): [2, 1], 
-}
-print new_accepting4 == [2]
+#(new_edges2, new_accepting2) = nfsmtrim(edges1,[]) 
+#print new_edges2 == {}
+#print new_accepting2 == [] 
+#
+#(new_edges3, new_accepting3) = nfsmtrim(edges1,[3,6]) 
+#print new_edges3 == {(1, 'a'): [1], (1, 'b'): [2], (2, 'b'): [3]}
+#print new_accepting3 == [3]
+#
+#edges4 = { (1,'a') : [1] ,
+#           (1,'b') : [2,5] ,
+#           (2,'b') : [3] ,
+#           (3,'b') : [4] ,
+#           (3,'c') : [2,1,4] } 
+#accepting4 = [ 2 ] 
+#(new_edges4, new_accepting4) = nfsmtrim(edges4, accepting4) 
+#print new_edges4 == { 
+#  (1, 'a'): [1],
+#  (1, 'b'): [2], 
+#  (2, 'b'): [3], 
+#  (3, 'c'): [2, 1], 
+#}
+#print new_accepting4 == [2]
