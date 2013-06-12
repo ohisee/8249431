@@ -861,3 +861,6 @@ if None and None:
     print ('see this');
 else:
     print ('see');
+    
+print ([] + ['abc']);
+print (any(['a']));
