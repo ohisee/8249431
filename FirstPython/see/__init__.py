@@ -864,3 +864,22 @@ else:
     
 print ([] + ['abc']);
 print (any(['a']));
+
+grammar2 = [
+      ("S", ["P", "a" ]),             
+      ("S", ["Q", "b" ]),             
+      ("P", ["P"]), 
+      ("Q", ["c", "d"]),              
+      ] 
+symbol = 'a';
+r = [ ];
+for g in grammar2:
+    r.append(True if symbol != g[0] else False);
+print (r);
+
+for i in range(10):
+    for j in range(10):
+        if j == 2:
+            break;
+        print ('j is %d' % j);
+    print ('i is %d' % i);

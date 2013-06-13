@@ -181,34 +181,118 @@ def sub_list(lst):
 # Hint 3: all([True,False,True]) = False
 #         any([True,True,False]) = True
 
-def cfgempty(grammar,symbol,visited):
+def cfgempty_h(grammar,symbol,visited):
     
     print ('Symbol %s' % symbol);
+    print ('Visited %s' % visited);
+    
+    r, p = [], [];
     for g in grammar:
-        if symbol != g[0] and symbol in g[1]:
-            return [];
+        r.append(True if symbol != g[0] else False);
+        p.append(True if symbol in g[1] else False);
+    if all(r) and any(p):
+        print ('symbol %s is a terminal' % symbol);
+        return True;
         
+    if symbol in visited:
+        print ('symbol in visited');
+        return None;
+    else:
+        
+        print ('Visiting %s' % symbol);
+        visited.append(symbol);
+        
+        for rw_rule in grammar:
+            if rw_rule[0] == symbol and any(rw_rule[1]):
+                print ('Rule[1] %s for symbol: %s' % (rw_rule[1], symbol));
+                for rw in rw_rule[1]:
+                    if rw not in visited:
+                        r = cfgempty_h(grammar, rw, visited);
+                        print ('returned 1 %s' % r);
+                        print ('At rule %s' % rw_rule[1]);
+                        if r is not None:
+                            o = [] + [rw];
+                            print ('returned 2 %s' % o);
+                            print ('Previous symbol %s' % rw);
+        return None;
+    
+def is_terminal(grammar,symbol):
+    r, p = [], [];
+    for g in grammar:
+        r.append(True if symbol != g[0] else False);
+        p.append(True if symbol in g[1] else False);
+    if all(r) and any(p):
+        return True;
+    
+def cfgempty_o(grammar,symbol,visited):
+    
+    print ('Symbol %s' % symbol);
+    print ('Visited %s' % visited);
+    
+    result = [];
+    non_terminal = [];
+    visited.append(symbol);
+    for rule in grammar:
+        if rule[0] == symbol:
+            local = [];
+            
+            print ('Rule[1] %s for symbol: %s' % (rule[1], symbol));
+            
+            for pos in range(len(rule[1])):
+                sym = rule[1][pos];
+                if is_terminal(grammar, sym):
+                    local = local + [sym];
+                else:
+                    if sym not in visited:
+                        r = cfgempty_o(grammar, sym, visited);
+                        if r is not None:
+                            local = local + r;
+                        else:
+                            del local[:];
+                            non_terminal = non_terminal + [True];
+                            break;
+                    else:
+                        return None;
+            result = result + local;
+    
+    print ('non terminal %s' % non_terminal);
+    return result;
+
+          
+def cfgempty(grammar,symbol,visited):
+    
     if symbol in visited:
         return None;
     else:
-        for rw_rule in grammar:
-            if rw_rule[0] == symbol and any(rw_rule[1]):
-                for rw in rw_rule[1]:
-                    print ('Visiting %s' % rw);
-                    visited.append(rw);
-                    r = cfgempty(grammar, rw, visited);
-                    if r is not None:
-                        return r.append(rw);
-        return None;
-                    
+        result = [];
+        visited.append(symbol);
+        for rule in grammar:
+            if rule[0] == symbol:
+                local = [];               
+                for pos in range(len(rule[1])):
+                    sym = rule[1][pos];
+                    if is_terminal(grammar, sym):
+                        local = local + [sym];
+                    else:
+                        if sym not in visited:
+                            r = cfgempty(grammar, sym, visited);
+                            if r is not None:
+                                local = local + r;
+                            else:
+                                del local[:];
+                                break;
+                result = result + local;
+        return result;
+        
+         
 # We have provided a few test cases for you. You will likely want to add
 # more of your own. 
 
-#grammar1 = [ 
-#      ("S", [ "P", "a" ] ),           
-#      ("P", [ "S" ]) ,               
-#      ] 
-#                        
+grammar1 = [ 
+      ("S", [ "P", "a" ] ),           
+      ("P", [ "S" ]) ,               
+      ] 
+#print (cfgempty(grammar1,"S",[]));             
 #print cfgempty(grammar1,"S",[]) == None 
 
 grammar2 = [
@@ -218,21 +302,32 @@ grammar2 = [
       ("Q", ["c", "d"]),              
       ] 
 
-print (cfgempty(grammar2,"S",[]));
-print cfgempty(grammar2,"S",[]) == ['c', 'd', 'b']
+grammar12 = [
+      ("S", ["a", "P", "b" ]),             
+      ("P", []),
+      ] 
+
+grammar13 = [
+      ("S", ["P", "a"]),             
+      ("P", ["Q"]),
+      ("Q", ["M"]),
+      ("M", ["b", "c"]),
+      ] 
+
+print (cfgempty(grammar12,"S",[]));
+#print cfgempty(grammar2,"S",[]) == ['c', 'd', 'b']
 
 
-#grammar3 = [  # some Spanish provinces
-#        ("S", [ "Barcelona", "P", "Huelva"]),
-#        ("S", [ "Q" ]),
-#        ("Q", [ "S" ]),
-#        ("P", [ "Las Palmas", "R", "Madrid"]),
-#        ("P", [ "T" ]),
-#        ("T", [ "T", "Toledo" ]),
-#        ("R", [ ]) ,
-#        ("R", [ "R"]), 
-#        ]
-#
+grammar3 = [  # some Spanish provinces
+        ("S", [ "Barcelona", "P", "Huelva"]),
+        ("S", [ "Q" ]),
+        ("Q", [ "S" ]),
+        ("P", [ "Las Palmas", "R", "Madrid"]),
+        ("P", [ "T" ]),
+        ("T", [ "T", "Toledo" ]),
+        ("R", [ ]) ,
+        ("R", [ "R"]), 
+        ]
+
+print (cfgempty(grammar3,"S",[]));
 #print cfgempty(grammar3,"S",[]) == ['Barcelona', 'Las Palmas', 'Madrid', 'Huelva']
-
-        
