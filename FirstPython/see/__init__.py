@@ -876,6 +876,8 @@ r = [ ];
 for g in grammar2:
     r.append(True if symbol != g[0] else False);
 print (r);
+print (not any([symbol == g[0] for g in grammar2]));
+print (any([symbol in g[1] for g in grammar2]));
 
 for i in range(10):
     for j in range(10):
@@ -883,3 +885,7 @@ for i in range(10):
             break;
         print ('j is %d' % j);
     print ('i is %d' % i);
+    
+print (all(['a', False]));
+print (all([]));
+print (any([]));
