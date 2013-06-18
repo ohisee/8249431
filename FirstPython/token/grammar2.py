@@ -243,7 +243,7 @@ def only_terminal(sym_lst, grammar):
             return False;
     return True;
 
-def can_cfg_symbol_be_rewritten(symbol, grammar, visited):
+def rewrite_cfg_symbol(symbol, grammar, visited):
     # Terminal
     if not any([g[0] == symbol for g in grammar]) and any([symbol in g[1] for g in grammar]):
         return [symbol];
@@ -251,24 +251,26 @@ def can_cfg_symbol_be_rewritten(symbol, grammar, visited):
         return None;
     else:
         uv = visited + [symbol];
-        print ("Symbol is %s" % symbol);
+        #print ("Symbol is %s" % symbol);
         for rhs in [rule[1] for rule in grammar if rule[0] == symbol and not only_terminal(rule[1], grammar)]:
             result = [];
             for rw_sym in rhs:
-                r = can_cfg_symbol_be_rewritten(rw_sym, grammar, uv);
+                r = rewrite_cfg_symbol(rw_sym, grammar, uv);
                 if r is not None:
                     result = result + r;
                 else:
                     result = result + [rw_sym];
-                print ("Result is %s" % result);
+                #print ("Result is %s" % result);
             return result;
                 
         
     
 def cfginfinite(grammar): 
-    # Put your code here!
-    for rule in grammar:
-        can_cfg_symbol_be_rewritten(rule[0], grammar, []);
+    for q in [rule[0] for rule in grammar]:
+        result = rewrite_cfg_symbol(q, grammar, []);
+        if result and q in result and len(result) > 1:
+            return True;
+    return False;
 
 # We have provided a few test cases. You will likely want to write your own
 # as well. 
@@ -277,14 +279,14 @@ grammar1 = [
       ("S", [ "S", "a" ]), # S -> S a
       ("S", [ "b", ]) , # S -> b 
       ] 
-#print cfginfinite(grammar1) == True
+print cfginfinite(grammar1) == True
 
 grammar2 = [ 
       ("S", [ "S", ]), # S -> S 
       ("S", [ "b", ]) , # S -> b 
       ] 
 
-#print cfginfinite(grammar2) == False
+print cfginfinite(grammar2) == False
 
 grammar3 = [ 
       ("S", [ "Q", ]), # S -> Q
@@ -293,7 +295,7 @@ grammar3 = [
       ("R", [ "Q"]), # R -> Q
       ] 
 
-#print cfginfinite(grammar3) == True
+print cfginfinite(grammar3) == True
 
 grammar4 = [  # Nobel Peace Prizes, 1990-1993
       ("S", [ "Q", ]),
@@ -304,20 +306,23 @@ grammar4 = [  # Nobel Peace Prizes, 1990-1993
       ("P", [ "Mandela and de Klerk"]),
       ] 
 
-#print cfginfinite(grammar4) == False
+print cfginfinite(grammar4) == False
 
 grammar12 = [ 
        ("S", [ "Q", ] ),        # S -> Q
        ("Q", [ "b", ]) ,        # Q -> b
        ("Q", [ "a", "R", ]),     # Q -> R a 
-       ("R", [ "Q"]),           # R -> Q
+       ("R", [ "S"]),           # R -> Q
        ] 
 
 grammar122 = [ 
        ("S", [ "P", "a" ] ),           # S -> P a
-       ("P", [ "S" ]) ,                # P -> S
+       ("P", [ "Q" ]) ,                # P -> S
+       ("Q", [ "R" ]),
+       ("R", [ "S", "b" ]),
+       ("O", [ "Z" ]),
        ] 
 
-print (can_cfg_symbol_be_rewritten("S", grammar122, []));
+print (rewrite_cfg_symbol("Q", grammar12, []));
 #mmm = [rule[1] for rule in grammar1 if rule[0] == 'S' and not only_terminal(rule[1], grammar1)];
 #print (mmm);
