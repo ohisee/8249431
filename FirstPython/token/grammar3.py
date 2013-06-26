@@ -114,8 +114,9 @@ print (chart);
 
 # Hint: This is tricky. If you are stuck, do a list comphrension over the grammar rules.
 
-def closure (grammar, i, x, ab, cd, j):
+def closure (grammar, i, x, ab, cd):
     return [ (g[0], [], g[1], i) for g in grammar if cd and cd[0] == g[0]];
+
 
 
 grammar = [ 
@@ -131,7 +132,7 @@ grammar = [
 #print closure(grammar,0,"exp",[],["exp","+","exp"]) == [('exp', [], ['exp', '+', 'exp'], 0), ('exp', [], ['exp', '-', 'exp'], 0), ('exp', [], ['(', 'exp', ')'], 0), ('exp', [], ['num'], 0)]
 #print closure(grammar,0,"exp",["exp"],["+","exp"]) == []
 
-print (closure(grammar,0,"exp",["exp","+"],["exp"], 0));
+print closure(grammar,0,"exp",["exp"],["+","exp"]);
 
 
 # Writing Shift
@@ -188,10 +189,10 @@ print (reductions(chart,2,'exp',['exp','+','exp'],[],0));
 
 param_grammar = [ 
     ("S", ["P"]),           # S -> P
-    ("S", ["C", "P", ")"]), # P -> ( P )
+    ("P", ["(", "P", ")"]), # P -> ( P )
     ("P", []),              # P ->
     ]
-tokens = ["(", "(", ")", ")"]
+tokens = ["(", "(", ")", ")", ]
 
 def parse(tokens, grammar):
     tokens = tokens + ["end_of_input_marker"];
@@ -212,17 +213,39 @@ def parse(tokens, grammar):
                 j = state[3];
                 
                 # Closure
-                next_states = closure(grammar, i, x, ab, cd, j);
+                # Current State ==   x -> a b . c d , j
+                # Option 1: For each grammar rule c -> p q r
+                # (where the c's match)
+                # make a next state               c -> . p q r , i
+                # English: We're about to start parsing a "c", but
+                #  "c" may be something like "exp" with its own
+                #  production rules. We'll bring those production rules in.
+                next_states = closure(grammar, i, x, ab, cd);
                 for next_state in next_states:
                     changes = addtochart(chart, i, next_state) or changes;
                     
                 # Shift
+                # Current State ==   x -> a b . c d , j
+                # Option 2: If tokens[i] == c,
+                # make a next state               x -> a b c . d , j
+                # in chart[i+1]
+                # English: We're looking for to parse token c next
+                #  and the current token is exactly c! Aren't we lucky!
+                #  So we can parse over it and move to j+1.
                 next_state = shift(tokens, i, x, ab, cd, j);
                 if next_state is not None:
                     changes = addtochart(chart, i + 1, next_state) or changes;
                     
                 # Reduction
-                next_state = reductions(chart, i, x, ab, cd, j);
+                # Current State ==   x -> a b . c d , j
+                # Option 3: If cd is [], the state is just x -> a b . , j
+                # for each p -> q . x r , l in chart[j]
+                # make a new state                p -> q x . r , l
+                # in chart[i]
+                # English: We just finished parsing an "x" with this token,
+                #  but that may have been a sub-step (like matching "exp -> 2"
+                #  in "2+3"). We should update the higher-level rules as well.
+                next_states = reductions(chart, i, x, ab, cd, j);
                 for next_state in next_states:
                     changes = addtochart(chart, i, next_state) or changes;
             
@@ -230,6 +253,7 @@ def parse(tokens, grammar):
             if not changes:
                 break;
             
+    # Print out parsing state(s)
     for i in range(len(tokens)):
         print ("=== chart %s" % str(i));
         for state in chart[i]:
