@@ -114,8 +114,8 @@ print (chart);
 
 # Hint: This is tricky. If you are stuck, do a list comphrension over the grammar rules.
 
-def closure (grammar, i, x, ab, cd):
-    return [];
+def closure (grammar, i, x, ab, cd, j):
+    return [ (g[0], [], g[1], i) for g in grammar if cd and cd[0] == g[0]];
 
 
 grammar = [ 
@@ -127,6 +127,126 @@ grammar = [
     ("t",[""])
     ]
 
-print closure(grammar,0,"exp",["exp","+"],["exp"]) == [('exp', [], ['exp', '+', 'exp'], 0), ('exp', [], ['exp', '-', 'exp'], 0), ('exp', [], ['(', 'exp', ')'], 0), ('exp', [], ['num'], 0)]
-print closure(grammar,0,"exp",[],["exp","+","exp"]) == [('exp', [], ['exp', '+', 'exp'], 0), ('exp', [], ['exp', '-', 'exp'], 0), ('exp', [], ['(', 'exp', ')'], 0), ('exp', [], ['num'], 0)]
-print closure(grammar,0,"exp",["exp"],["+","exp"]) == []
+#print closure(grammar,0,"exp",["exp","+"],["exp"]) == [('exp', [], ['exp', '+', 'exp'], 0), ('exp', [], ['exp', '-', 'exp'], 0), ('exp', [], ['(', 'exp', ')'], 0), ('exp', [], ['num'], 0)]
+#print closure(grammar,0,"exp",[],["exp","+","exp"]) == [('exp', [], ['exp', '+', 'exp'], 0), ('exp', [], ['exp', '-', 'exp'], 0), ('exp', [], ['(', 'exp', ')'], 0), ('exp', [], ['num'], 0)]
+#print closure(grammar,0,"exp",["exp"],["+","exp"]) == []
+
+print (closure(grammar,0,"exp",["exp","+"],["exp"], 0));
+
+
+# Writing Shift
+
+# We are currently looking at chart[i] and we see x => ab . cd from j. The input is tokens.
+
+# Your procedure, shift, should either return None, at which point there is
+# nothing to do or will return a single new parsing state that presumably
+# involved shifting over the c if c matches the ith token.
+
+def shift (tokens, i, x, ab, cd, j):
+    if cd and len(tokens) >= i and cd[0] == tokens[i]:
+        return (x, ab + [cd[0]], cd[1:], j);
+    else:
+        return None;
+
+#print shift(["exp","+","exp"],2,"exp",["exp","+"],["exp"],0) == ('exp', ['exp', '+', 'exp'], [], 0)
+#print shift(["exp","+","exp"],0,"exp",[],["exp","+","exp"],0) == ('exp', ['exp'], ['+', 'exp'], 0)
+#print shift(["exp","+","exp"],3,"exp",["exp","+","exp"],[],0) == None
+#print shift(["exp","+","ANDY LOVES COOKIES"],2,"exp",["exp","+"],["exp"],0) == None
+
+print ('testing');
+print shift(["exp","+","exp"],2,"exp",["exp","+"],["exp"],0);
+
+o = ['exp'];
+print (o[0]);
+oo = ["exp","+","ANDY LOVES COOKIES"];
+print (len(oo));
+
+
+# Writing Reductions
+
+# We are looking at chart[i] and we see x => ab . cd from j.
+
+# Hint: Reductions are tricky, so as a hint, remember that you only want to do
+# reductions if cd == []
+
+# Hint: You'll have to look back previously in the chart. 
+
+chart = {0: [('exp', ['exp'], ['+', 'exp'], 0), ('exp', [], ['num'], 0), ('exp', [], ['(', 'exp', ')'], 0), ('exp', [], ['exp', '-', 'exp'], 0), ('exp', [], ['exp', '+', 'exp'], 0)], 
+         1: [('exp', ['exp', '+'], ['exp'], 0)], 
+         2: [('exp', ['exp', '+', 'exp'], [], 0)]}
+
+def reductions(chart, i, x, ab, cd, j):
+    if len(cd) == 0 and j in chart:
+        states = chart[j];
+        return [(state[0], state[1] + [state[2][0]], state[2][1:], state[3]) for state in states if state[2] and state[2][0] == x];
+    else:
+        return [];
+             
+#print reductions(chart,2,'exp',['exp','+','exp'],[],0) == [('exp', ['exp'], ['-', 'exp'], 0), ('exp', ['exp'], ['+', 'exp'], 0)]
+print ('testing...')
+print (reductions(chart,2,'exp',['exp','+','exp'],[],0));
+
+param_grammar = [ 
+    ("S", ["P"]),           # S -> P
+    ("S", ["C", "P", ")"]), # P -> ( P )
+    ("P", []),              # P ->
+    ]
+tokens = ["(", "(", ")", ")"]
+
+def parse(tokens, grammar):
+    tokens = tokens + ["end_of_input_marker"];
+    chart = {};
+    start_rule = grammar[0]; # for example, S -> P
+    for i in range(len(tokens) + 1):
+        chart[i] = [];
+    start_state = (start_rule[0], [], start_rule[1], 0);
+    chart[0] = [ start_state ];
+    for i in range(len(tokens)):
+        while True:
+            changes = False;
+            for state in chart[i]:
+                # State === x -> ab . cd, j
+                x = state[0];
+                ab = state[1];
+                cd = state[2];
+                j = state[3];
+                
+                # Closure
+                next_states = closure(grammar, i, x, ab, cd, j);
+                for next_state in next_states:
+                    changes = addtochart(chart, i, next_state) or changes;
+                    
+                # Shift
+                next_state = shift(tokens, i, x, ab, cd, j);
+                if next_state is not None:
+                    changes = addtochart(chart, i + 1, next_state) or changes;
+                    
+                # Reduction
+                next_state = reductions(chart, i, x, ab, cd, j);
+                for next_state in next_states:
+                    changes = addtochart(chart, i, next_state) or changes;
+            
+            # We are done if nothing changed       
+            if not changes:
+                break;
+            
+    for i in range(len(tokens)):
+        print ("=== chart %s" % str(i));
+        for state in chart[i]:
+            x = state[0];
+            ab = state[1];
+            cd = state[2];
+            j = state[3];
+            print ("   %s  ->" % x),
+            for sym in ab:
+                print (" %s" % sym),
+            print (" ."),
+            for sym in cd:
+                print (" %s" % sym), 
+            print ("  from %s" % str(j));
+                
+    accepting_state = (start_rule[0], start_rule[1], [], 0)
+    return accepting_state in chart[len(tokens) - 1];
+    
+result = parse(tokens, param_grammar);
+print (result);
