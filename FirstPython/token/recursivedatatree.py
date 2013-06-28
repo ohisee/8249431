@@ -5,7 +5,7 @@
 
 ptree = [("word-element", "Rama's"), ("word-element","Journey")] # Change this variable!
 
-
+# Insert into Tree
 def insert(tree, element):
     if tree == None:
         return (None, element, None);
@@ -19,9 +19,10 @@ def insert(tree, element):
         else:
             new_right_child = insert(right_child, element);
             return (left_child, this_element, new_right_child);
-        
+    
+# Print Tree
 def print_tree(tree):
-    if tree == None:
+    if tree is None:
         return;
     else:
         left_child = tree[0];
@@ -30,5 +31,25 @@ def print_tree(tree):
         print_tree(left_child);
         print this_element;
         print_tree(right_child);
-        
-        
+      
+# Find element in tree  
+def contains(tree, element):
+    if tree is None:
+        return False;
+    else:
+        left_child = tree[0];
+        this_element = tree[1];
+        right_child = tree[2];
+        if this_element == element:
+            return True;
+        elif element <= this_element:
+            return contains(left_child, element);
+        else:
+            return contains(right_child, element);
+
+t1 = None;
+for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]:
+    t1 = insert(t1, i);
+    
+print_tree(t1);
+print (t1);
