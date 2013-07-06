@@ -223,12 +223,12 @@ def t_VAR(token):
     return token;
 
 def t_newline(t):
-        r'\n'
-        t.lexer.lineno += 1
+    r'\n'
+    t.lexer.lineno += 1
 
 def t_error(t):
-        print "JavaScript Lexer: Illegal character " + t.value[0]
-        t.lexer.skip(1)
+    print "JavaScript Lexer: Illegal character " + t.value[0]
+    t.lexer.skip(1)
 
 # We have included two test cases to help you debug your lexer. You will
 # probably want to write some of your own. 
