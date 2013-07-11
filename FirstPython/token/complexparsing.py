@@ -152,8 +152,6 @@ def parse(tokens,grammar):
 #####################################################################
 # We've rigged up a simple testing framework for you. 
 
-#from grammar3 import parse;
-
 def test_it(grammar, tokens): 
     X = max( len(grammar) , len(tokens), max([len(rule[1]) for rule in grammar]))
     result = parse(tokens,grammar) 
@@ -175,12 +173,11 @@ grammar = [
 
 print ('testing...');
 
-
-for i in [5,10,15,20,25]:
-    # Make i nested balanced parentheses. 
-    tokens = [ "(" for j in range(i) ] + [ ")" for j in range(i) ] 
-    print tokens;
-    test_it(grammar,tokens) 
+#for i in [5,10,15,20,25]:
+#    # Make i nested balanced parentheses. 
+#    tokens = [ "(" for j in range(i) ] + list(','.join(['r' for j in range(i)])) + [ ")" for j in range(i) ] 
+#    print tokens;
+#    test_it(grammar,tokens)
 
 # If you run this and look closely, you'll see that as X doubles
 # from 5 to 10, the work_count roughly doubles as well, and so on.
@@ -188,5 +185,31 @@ for i in [5,10,15,20,25]:
 # parentheses grammar behaves like X^1, not X^3. So this isn't the
 # answer. Use your creativity to find something that is. 
  
-grammar = [ ] # put your final answer here
-tokens = [ ] # put your final answer here
+#grammar = [ ] # put your final answer here
+#tokens = [ ] # put your final answer here
+
+grammar = [
+  ("S", ["P" ]) , 
+  ("P", ["(" , "P", ")" ]),
+  ("P", [ ]) , 
+  ("P", ["R"]),
+  ("R", ["r", ",", "R"]),
+  ("R", ["Q"]),
+  ("Q", ["QQ"]),
+  ("QQ", ["F"]),
+  ("F", ["FF"]),
+  ("FF", ["M"]),
+  ("M", ["MM"]),
+  ("MM", ["N"]),
+  ("N", ["NN"]),
+  ("NN", ["O"]),
+  ("O", ["OO"]),
+  ("OO", ["T"]),
+  ("T", ["TT"]),
+  ("TT", ["U"]),
+  ("U", ["r"]),
+] 
+
+tokens = ['(', '(', '(', '(', '(', '(', '(', '(', '(', '(', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ')', ')', ')', ')', ')', ')', ')', ')', ')', ')']
+
+test_it(grammar,tokens);
