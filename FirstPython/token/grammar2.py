@@ -459,3 +459,25 @@ print isambig(grammar3, "A", ["Tsavo"])
 print isambig(grammar3, "A", ["Dawa", "Gucha"]) == True
 print isambig(grammar3, "A", ["Dawa", "Gucha", "Nairobi"]) == False
 print isambig(grammar3, "A", ["Tsavo"]) == False
+
+# The following are extra grammar rule.
+# The grammar must be finite when calling isambig function or else isambig will trigger error - max depth recursion.
+grammar9 = [
+  ("S", ["P", "Q" ]) , 
+  ("P", ["(" ]),
+  ("Q", ["("]),
+  ("P", [ ")"]),
+] 
+
+print ("testing.....");
+tokens = ['(', '(']
+
+print isambig(grammar9, "S", tokens);
+
+# This grammar is infinite.
+grammar10 = [
+  ("S", ["P" ]) , 
+  ("P", ["(" , "P", ")" ]),
+  ("P", [ ]) , 
+] 
+print (cfginfinite(grammar10));
