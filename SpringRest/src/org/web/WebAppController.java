@@ -31,6 +31,9 @@ public class WebAppController {
 	@RequestMapping (value = WebAppUrls.URL_ITEM, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Item getItem(@PathVariable String identifier) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Method GET - getItem");
+		}
 		return itemService.getItem(identifier);
 	}
 	
