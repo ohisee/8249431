@@ -10,22 +10,23 @@ import org.springframework.web.client.RestTemplate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.items.RootAddress;
+
 
 /**
  * 
  *
  */
-
 @Component("simpleRestClient")
 public class SimpleRestClient {
 	
 	private static Log logger = LogFactory.getLog(SimpleRestClient.class);
 	
-	public String invokeRestUrl(String url) {
+	public RootAddress invokeRestUrl(String url) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Ready to call URL");
 		}
-		String result = restTemplate.getForObject(url, String.class);
+		RootAddress result = restTemplate.getForObject(url, RootAddress.class);
 		return result;
 	}
 	

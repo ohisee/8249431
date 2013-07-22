@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.items.RootAddress;
+
 
 /**
  * 
@@ -25,14 +27,12 @@ public class UrlHandlerController {
 	
 	@RequestMapping(value = "/callrest", method = RequestMethod.GET)
 	@ResponseBody
-	public String getUrlFromUI(@RequestParam("resturl") String url ) {
+	public RootAddress getUrlFromUI(@RequestParam("resturl") String url ) {
 		
 		logger.info("METHOD GET - getUrlFromUI -");
 		logger.info("URL is " + url);
 		
-		String s = simpleRestClient.invokeRestUrl(url);
-		
-		logger.info("Return " + s);
+		RootAddress s = simpleRestClient.invokeRestUrl(url);
 		
 		return s;
 	}
