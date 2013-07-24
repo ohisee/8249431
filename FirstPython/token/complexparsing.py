@@ -213,3 +213,36 @@ grammar = [
 tokens = ['(', '(', '(', '(', '(', '(', '(', '(', '(', '(', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ',', 'r', ')', ')', ')', ')', ')', ')', ')', ')', ')', ')']
 
 test_it(grammar,tokens);
+
+
+greeting = "hola";
+def makegreeter(greeting):
+    def greeter(person):
+        print "%s %s" % (greeting, person);
+    return greeter;
+
+sayhello = makegreeter("hello from bay");
+sayhello("tree");
+
+def env_lookup(varname, env):
+    # env = (parent, dictionary)
+    if varname in env[1]:
+        return (env[1])[varname];
+    elif env[0] is None:
+        return None;
+    else:
+        return env_lookup(varname, env[0]);
+    
+def env_update(varname, value, env):
+    if varname in env[1]:
+        (env[1])[varname] = value;
+    elif not (env[0] is None):
+        env_update (varname, value, env[0]);
+        
+global_env = (None, {"x" : 11, "y" : 22});
+new_env = (global_env, {"x" : 33, "z" : 44});
+print (env_lookup("x", new_env));
+print (env_lookup("y", global_env));
+env_update("x", 55, new_env);
+print (env_lookup("x", new_env));
+print (env_lookup("x", global_env));
