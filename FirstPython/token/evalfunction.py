@@ -18,13 +18,13 @@ def eval_stmt(tree, environment):
                 print "ERROR: wrong number of args"
             else:
                 #QUIZ: Make a new environment frame
-                value = eval_exp(args, environment);
-                new_env = (fenv, fparams);
-                env_update(fparams, value, new_env);
+                new_env = (fenv, {}); 
+                for i in range(len(args)):
+                    value = eval_exp(args[i], environment);
+                    (new_env[1])[fparams[i]] = value;
                 try:
                     # QUIZ : Evaluate the body
-                    return_value = eval_exp(fbody, fenv);
-                    raise Exception(return_value);
+                    eval_stmts(fbody, new_env);
                     return None
                 except Exception as return_value:
                     return return_value
