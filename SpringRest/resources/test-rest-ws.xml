@@ -14,13 +14,14 @@
 	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
 		<property name="messageConverters">
-			<list>
+			<util:list>
 				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 					<property name="objectMapper" ref="objectMapper" />
 					<property name="prettyPrint" value="true" />
 				</bean>
-			</list>
-		</property>	
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+			</util:list>
+		</property>
 	</bean>
 	<bean id="restTemplateString" class="org.springframework.web.client.RestTemplate" />
 </beans>
