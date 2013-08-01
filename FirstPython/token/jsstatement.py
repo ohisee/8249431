@@ -110,13 +110,25 @@ from jstokens import tokens     # use out JavaScript tokens
 
 start = 'js'    # the start symbol in our grammar
 
+precedence = (
+        # Fill in the precedence and associativity. List the operators
+        # in order of _increasing_ precedence (start low, go to high). 
+    ('left', 'OROR'), 
+    ('left', 'ANDAND'), 
+    ('left', 'EQUALEQUAL'), 
+    ('left', 'LT', 'LE', 'GT', 'GE'), 
+    ('left', 'PLUS', 'MINUS'), 
+    ('left', 'TIMES', 'DIVIDE'), 
+    ('right', 'NOT'),        
+)
+
 def p_js(p): 
-        'js : element js'
-        p[0] = [p[1]] + p[2]
+    'js : element js'
+    p[0] = [p[1]] + p[2]
 
 def p_js_empty(p):
-        'js : '
-        p[0] = [ ]
+    'js : '
+    p[0] = [ ]
 
 ######################################################################
 # Fill in the rest of the grammar for elements and statements here.
@@ -230,13 +242,131 @@ def p_js_stmt_exp(p):
     p[0] = ('exp', p[1]);
 
 ######################################################################
+# While Statement
+######################################################################
+
+def p_stmt_while(p):
+    'stmt : WHILE exp compoundstmt'
+    p[0] = ("while", p[2], p[3])
+
+######################################################################
 # done
+######################################################################
+
+######################################################################
+#
+# Included parsing JavaScript Expression
+#
 ######################################################################
 
 # For now, we will assume that there is only one type of expression.
 def p_exp_identifier(p): 
-        'exp : IDENTIFIER'
-        p[0] = ("identifier",p[1]) 
+    'exp : IDENTIFIER'
+    p[0] = ("identifier",p[1]) 
+    
+# Here's the rules for simple expressions.
+        
+def p_exp_number(p):
+    'exp : NUMBER'
+    p[0] = ('number',p[1])
+
+def p_exp_string(p):
+    'exp : STRING'
+    p[0] = ('string',p[1])
+    
+def p_exp_true(p):
+    'exp : TRUE'
+    p[0] = ('true','true')
+    
+def p_exp_false(p):
+    'exp : FALSE'
+    p[0] = ('false','false')
+    
+def p_exp_not(p):
+    'exp : NOT exp'
+    p[0] = ('not', p[2])
+    
+def p_exp_parens(p):
+    'exp : LPAREN exp RPAREN'
+    p[0] = p[2]
+
+# This is what the rule for anonymous functions would look like, but since
+# they involve statements they are not part of this assignment. Leave this
+# commented out, but feel free to use it as a hint.
+#
+## def p_exp_lambda(p):
+##         'exp : FUNCTION LPAREN optparams RPAREN compoundstmt'  
+##         p[0] = ("function",p[3],p[5])
+
+######################################################################
+# Fill in the rest of the grammar for expressions.
+#
+# This can be done in about 50 lines using about 12 p_Something()
+# definitions. Remember that you can save time by lumping the binary
+# operator rules together. 
+######################################################################
+
+
+#    exp ->   exp || exp        # lowest precedence, left associative
+#           | exp && exp        # higher precedence, left associative 
+#           | exp == exp        # higher precedence, left associative
+#           | exp < exp         # /---
+#           | exp > exp         # | higher precedence, 
+#           | exp <= exp        # | left associative
+#           | exp >= exp        # \---
+#           | exp + exp         # /--- higher precedence,
+#           | exp - exp         # \--- left associative
+#           | exp * exp         # /--- higher precedence,
+#           | exp / exp         # \--- left associative
+#
+# In each case, the parse tree is the tuple:
+# 
+#       ("binop", left_child, operator_token, right_child) 
+
+def p_exp_binary_operation(p):
+    '''exp : exp OROR exp
+           | exp ANDAND exp
+           | exp EQUALEQUAL exp
+           | exp LT exp
+           | exp GT exp
+           | exp LE exp
+           | exp GE exp
+           | exp PLUS exp
+           | exp MINUS exp
+           | exp TIMES exp
+           | exp DIVIDE exp'''
+    p[0] = ('binop', p[1], p[2], p[3]);
+
+# Finally, it is possible to have a function call as an expression:
+#
+#       exp -> IDENTIFIER ( optargs ) 
+#
+# The parse tree is the tuple ("call", function_name, arguments). 
+#
+#       optargs -> 
+#       optargs -> args
+#       args -> exp , args
+#       args -> exp 
+
+def p_exp_function(p):
+    'exp : IDENTIFIER LPAREN optargs RPAREN'
+    p[0] = ('call', p[1], p[3]);
+    
+def p_exp_function_optargs_empty(p):
+    'optargs : '
+    p[0] = [];
+    
+def p_exp_function_optargs_args(p):
+    'optargs : args'
+    p[0] = p[1];
+    
+def p_exp_function_args(p):
+    'args : exp COMMA args'
+    p[0] = [p[1]] + p[3];
+    
+def p_exp_function_arg(p):
+    'args : exp'
+    p[0] = [p[1]];
 
 # We have included a few tests. You will likely want to write your own.
 
@@ -244,9 +374,9 @@ jslexer = lex.lex(module=jstokens)
 jsparser = yacc.yacc() 
 
 def test_parser(input_string): 
-        jslexer.input(input_string) 
-        parse_tree = jsparser.parse(input_string,lexer=jslexer) 
-        return parse_tree
+    jslexer.input(input_string) 
+    parse_tree = jsparser.parse(input_string,lexer=jslexer) 
+    return parse_tree
 
 # Simple function with no arguments and a one-statement body.
 jstext1 = "function myfun() { return nothing ; }"
@@ -286,3 +416,12 @@ if cherry {
 """
 jstree4 = [('stmt', ('if-then', ('identifier', 'cherry'), [('exp', ('identifier', 'orchard')), ('if-then-else', ('identifier', 'uncle_vanya'), [('exp', ('identifier', 'anton')), ('exp', ('identifier', 'chekov'))], []), ('exp', ('identifier', 'nineteen_oh_four'))]))]
 print test_parser(jstext4) == jstree4
+
+jstext5 = """
+    var i = 0;
+    while (i <= 5) {
+      i = i + 2;
+    };
+"""
+jstree5 = [('stmt', ('var', 'i', ('number', 0.0))), ('stmt', ('while', ('binop', ('identifier', 'i'), '<=', ('number', 5.0)), [('assign', 'i', ('binop', ('identifier', 'i'), '+', ('number', 2.0)))]))]
+print (test_parser(jstext5));
