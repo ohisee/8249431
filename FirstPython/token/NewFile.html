@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Udacity</title>
+</head>
+<body>
+	<h1>Udacity</h1>
+	<p>
+		<b>Udacity</b> is a private institution of <a
+			href="http://www.wikipedia.org/wiki/Higher_education"> higher
+			education founded by</a> <a
+			href="http://www.wikipedia.org/wiki/Sebastian_Thrun">Sebastian
+			Thrun</a>, David Stavens, and Mike Sokolsky with the goal to provide
+		university-level education that is "both high quality and low cost".<br />It
+		is the outgrowth of a free computer science class offered in 2011
+		through Stanford University. Currently, Udacity is working on its
+		second course on building a search engine. Udacity was announced at
+		the 2012 <a href="http://www.wikipedia.org/wiki/Digital_Life_Design">Digital
+			Life Design</a> conference.
+	</p>
+	<script type="text/javascript">
+	function gcd(a, b) {
+		if (a == b) {
+			return a;
+		}
+		if (a > b) {
+			return gcd (a - b, b);
+		} else {
+			return gcd (a, b - a);
+		}
+	};
+	
+	function apache(iroquois, ottawa) { 
+		var seneca = 1; 
+		var creek = 2; 
+		document.write(seneca); 
+		document.write(iroquois); 
+		document.write(ottawa); 
+		var cherokee = function(seneca, creek) { 
+		    document.write(seneca); 
+		    document.write(iroquois);
+		    document.write(ottawa); 
+		    document.write(creek); 
+		    seneca = 33; 
+		    creek = 44; 
+		    iroquois = 55; 
+		    ottawa = 66;
+		    document.write(seneca);
+		    document.write(creek);
+		}; 
+		cherokee(777,888); 
+		document.write(seneca); 
+		document.write(iroquois); 
+		document.write(ottawa); 
+		document.write(creek); 
+	};
+	apache(9,10);
+	</script>
+</body>
+</html>

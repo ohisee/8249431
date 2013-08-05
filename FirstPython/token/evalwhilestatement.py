@@ -170,7 +170,7 @@ def eval_while(while_stmt, env):
     while eval_exp(conditional_exp, env):
         eval_stmts(while_stmt_body, env);
 
-environment = {"i" : 0}
+environment = {"i" : 7}
 w = ('while', ('binop', ('identifier', 'i'), '<=', ('number', 5.0)), [('assign', 'i', ('binop', ('identifier', 'i'), '+', ('number', 2.0)))])
 eval_stmt(w, environment);
 print (environment);
