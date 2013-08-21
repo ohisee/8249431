@@ -7,7 +7,14 @@ def eval_stmt(tree, environment):
     if stmttype == "call": # ("call", "sqrt", [("number","2")])
         fname = tree[1] # "sqrt"
         args = tree[2] # [ ("number", "2") ]
-        fvalue = env_lookup(fname, environment)
+        fvalue = env_lookup(fname, environment); # None for write
+        # document.write() function
+        if fname == "write":
+            for arg in args:
+                argval = eval_exp(arg, environment);
+                output_sofar = env_lookup("javascript output", environment);
+                env_update("javascript output", output_sofar + str(argval), environment);
+            return None;
         if fvalue[0] == "function":
             # We'll make a promise to ourselves:
             # ("function", params, body, env)
@@ -27,7 +34,7 @@ def eval_stmt(tree, environment):
                     eval_stmts(fbody, new_env);
                     return None
                 except Exception as return_value:
-                    return return_value
+                    return return_value;
         else:
             print  "ERROR: call to non-function"
     elif stmttype == "return": 
@@ -67,7 +74,9 @@ def eval_exp(exp, env):
         if value == None: 
             print "ERROR: unbound variable " + vname
         else:
-            return value
+            return value;
+    elif etype == "string":
+        return str(exp[1]);
 
 def eval_stmts(stmts, env): 
     for stmt in stmts:
@@ -76,6 +85,8 @@ def eval_stmts(stmts, env):
 
 sqrt = ("function",("x"),(("return",("binop",("identifier","x"),"*",("identifier","x"))),),{})
 
-environment = (None, {"sqrt":sqrt})
+environment = (None, {"sqrt" : sqrt, "javascript output" : ""});
 
-print eval_stmt(("call","sqrt",[("number","2")]),environment)    
+print eval_stmt(("call","sqrt",[("number","2")]),environment);
+print eval_stmt(("call","write",[("string","abc"), ("string", " bbb")]),environment);
+print (environment); 
