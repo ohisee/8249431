@@ -293,10 +293,9 @@ def p_exp_parens(p):
 # This is what the rule for anonymous functions would look like, but since
 # they involve statements they are not part of this assignment. Leave this
 # commented out, but feel free to use it as a hint.
-#
-## def p_exp_lambda(p):
-##         'exp : FUNCTION LPAREN optparams RPAREN compoundstmt'  
-##         p[0] = ("function",p[3],p[5])
+def p_exp_lambda(p):
+    'exp : FUNCTION LPAREN optparams RPAREN compoundstmt'
+    p[0] = ("function",p[3],p[5])
 
 ######################################################################
 # Fill in the rest of the grammar for expressions.
@@ -425,3 +424,6 @@ jstext5 = """
 """
 jstree5 = [('stmt', ('var', 'i', ('number', 0.0))), ('stmt', ('while', ('binop', ('identifier', 'i'), '<=', ('number', 5.0)), [('assign', 'i', ('binop', ('identifier', 'i'), '+', ('number', 2.0)))]))]
 print (test_parser(jstext5));
+
+jstext6 = """var i = function (x, y) {return 3 + 4;};"""
+print (test_parser(jstext6));
