@@ -427,3 +427,35 @@ print (test_parser(jstext5));
 
 jstext6 = """var i = function (x, y) {return 3 + 4;};"""
 print (test_parser(jstext6));
+
+jstext7 = """
+function tvtropes(tgwtg) {
+    var theonion = "reddit" + "pennyarcade";
+    var loadingreadyrun = function(extracredits) {
+        write(tgwtg);
+        write(" "); 
+        write(theonion);
+        write(" ");
+        write(extracredits);
+    } ;    
+    return loadingreadyrun; 
+}
+var yudkowsky = tvtropes(3); 
+var tgwtg = 888;
+var extracredits = 999;
+yudkowsky(4);  
+"""
+jjj = [('function', 'tvtropes', ['tgwtg'], [('var', 'theonion', ('binop', ('string', 'reddit'), '+', ('string', 'pennyarcade'))), ('var', 'loadingreadyrun', ('function', ['extracredits'], [('exp', ('call', 'write', [('identifier', 'tgwtg')])), ('exp', ('call', 'write', [('string', ' ')])), ('exp', ('call', 'write', [('identifier', 'theonion')])), ('exp', ('call', 'write', [('string', ' ')])), ('exp', ('call', 'write', [('identifier', 'extracredits')]))])), ('return', ('identifier', 'loadingreadyrun'))]), ('stmt', ('var', 'yudkowsky', ('call', 'tvtropes', [('number', 3.0)]))), ('stmt', ('var', 'tgwtg', ('number', 888.0))), ('stmt', ('var', 'extracredits', ('number', 999.0))), ('stmt', ('exp', ('call', 'yudkowsky', [('number', 4.0)])))]
+print test_parser(jstext7) == jjj;
+
+jstext8 = """
+function foo(ax) {
+    var pf = function (ax) {
+        return ax + ax;
+    };
+    return pf;
+}
+var i = foo (4);
+write(i (4)); 
+""";
+print test_parser(jstext8);
