@@ -290,11 +290,10 @@ fragment1 = [ ("a", ["1"]),
               ("d", ["c","b"]), ]
 
 
-removedead (fragment1, ["a","d"]);
-removedead (fragment2, ["c"]);
+print (removedead (fragment1, ["a","d"]));
+print (removedead (fragment2, ["c", "a"]));
 
 print removedead(fragment1, ["a","d"]) == [('b', ['2']), ('c', ['3']), ('a', ['5']), ('d', ['c', 'b'])]
 print removedead(fragment2, ["c"]) == [('c', ['2'])]
 print removedead(fragment1, ["a"]) == [('a', ['5'])]
 print removedead(fragment1, ["d"]) == [('b', ['2']), ('c', ['3']), ('d', ['c', 'b'])]
-
