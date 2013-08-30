@@ -96,7 +96,7 @@ def t_NUM_hexadecimal(token):
 #            number = number + ord(i) - ord('0');
 #        else:
 #            number = number + 10 + ord(i) - ord('a');
-#        number = number + int(i);
+        number = number + int(i);
     token.value = number;
     token.type = 'NUM'
     return token;
