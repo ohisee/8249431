@@ -145,6 +145,10 @@ def lsubstring(X,Y):
 
 # We have included some test cases. You will likely want to write your own.
 
+print (csuffix('chat', 'hat'), chart);
+print (prefixes('chat'));
+print ([(r, q) for r in prefixes('chat') for q in prefixes('hat')])
+
 print lsubstring("Tapachula", "Temapache") == 5  # Mexico, "apach"
 print chart[("Tapach","Temapach")] == 5
 print lsubstring("Harare", "Mutare") == 3        # Zimbabwe, "are" 
@@ -161,3 +165,47 @@ print chart[("Aceh", "Jambi")] == 0
 #print (csuffix('chat', 'hat'));
 #print (lsubstring("Tapachula", "Temapache"))
 #print (chart[("Tapach","Temapach")])
+
+# Define a variable regexp that matches numbers with 1 or more leading digits
+# and an optional . followed by 0 or more digits.
+
+import re;
+
+regexp = r"[0-9]+\.?[0-9]*";
+#regexp = r"[0-9]+(?:\.[0-9]*)?";
+
+tests = [("123", True), ("1.2", True), ("1.", True), (".5", False), (".5.6", False), ("1..2", False)]
+
+for r, ans in tests:
+    print (re.findall(regexp, r) == [r]) == ans
+    
+print ('testing re');
+
+# Learning Regular Expressions
+
+# Define a variable regexp that matches the left 3 strings but not the right 3.
+
+#   Yes     No
+#   aaa    aabbb
+#   abb    aaccc
+#   acc     bc
+
+regexp = r"a(?:aa|bb|cc)"
+regexp = r"a+(?:(?:bb)|(?:cc))?"
+
+tests = [("aaa", True), ("abb", True), ("acc", True), ("aabbb", False), ("aaccc", False), ("bc", False)]
+
+for r, ans in tests:
+    #print (re.findall(regexp, r))
+    print (re.findall(regexp, r) == [r]) == ans
+    
+    
+# List Comprehensions
+
+# Write a short Python program that for all numbers x between 0 and 99 prints
+# x^3 (x*x*x), but only if x is even and x^3 < 20.
+
+def cubic():
+    return [x*x*x for x in range(100) if (x % 2 == 0) and (x*x*x < 20)];
+
+print (cubic());
