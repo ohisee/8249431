@@ -272,5 +272,22 @@ def parse(tokens, grammar):
     accepting_state = (start_rule[0], start_rule[1], [], 0)
     return accepting_state in chart[len(tokens) - 1];
     
+print ("chart -------");
 result = parse(tokens, param_grammar);
+print (result);
+
+param_grammar2 = [
+        ("S", ["E"]),
+        ("E", ["(", "E", ")"]),
+        ("E", ["E", "+", "E"]),
+        ("E", ["E", "-", "E"]),
+        ("E", ["id", "(", "A", ")"]),
+        ("E", ["id"]),
+        ("A", ["NA"]),
+        ("A", []),
+        ("NA", ["E"]),
+        ("NA", ["E", ",", "NA"]),
+        ]
+tokens2 = ["id", "(", "(", "id", ")", ",", "id", ")"];
+result = parse(tokens2, param_grammar2);
 print (result);
