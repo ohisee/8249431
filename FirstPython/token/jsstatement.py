@@ -118,8 +118,8 @@ precedence = (
     ('left', 'EQUALEQUAL'), 
     ('left', 'LT', 'LE', 'GT', 'GE'), 
     ('left', 'PLUS', 'MINUS'), 
-    ('left', 'TIMES', 'DIVIDE'), 
-    ('right', 'NOT'),        
+    ('left', 'TIMES', 'DIVIDE', 'MOD'), 
+    ('right', 'NOT'),      
 )
 
 def p_js(p): 
@@ -171,6 +171,14 @@ def p_js_optparams_params(p):
 def p_js_optparams_param(p):
     'params : IDENTIFIER';
     p[0] = [p[1]];
+    
+#def p_js_optsemi_none(p):
+#    'optsemi : '
+#    p[0] = p[0] 
+#
+#def p_js_optsemi_some(p):
+#    'optsemi : SEMICOLON'
+#    p[0] = p[0] 
 
 # compoundstmt -> { statements } 
 # statements -> stmt ; statements
@@ -323,17 +331,18 @@ def p_exp_lambda(p):
 #       ("binop", left_child, operator_token, right_child) 
 
 def p_exp_binary_operation(p):
-    '''exp : exp OROR exp
-           | exp ANDAND exp
-           | exp EQUALEQUAL exp
-           | exp LT exp
-           | exp GT exp
-           | exp LE exp
-           | exp GE exp
-           | exp PLUS exp
+    '''exp : exp PLUS exp
            | exp MINUS exp
            | exp TIMES exp
-           | exp DIVIDE exp'''
+           | exp DIVIDE exp
+           | exp MOD exp
+           | exp EQUALEQUAL exp
+           | exp LE exp
+           | exp GE exp
+           | exp LT exp
+           | exp GT exp
+           | exp OROR exp
+           | exp ANDAND exp'''
     p[0] = ('binop', p[1], p[2], p[3]);
 
 # Finally, it is possible to have a function call as an expression:
@@ -459,3 +468,45 @@ var i = foo (4);
 write(i (4)); 
 """;
 print test_parser(jstext8);
+
+jstext9 = """var a = 1;
+var x = 2;
+var y = 2;
+function myfun(x) {
+        var a = 3; 
+        x = x + y;
+        y = x + y;
+        var p = function(y,z) {
+                var q = function(x,z) { 
+                        return x+a*y/z;
+                } ;
+                return q; 
+        } ;
+        while (x < y && (x < 10)) {
+                if (! (x < y)) {
+                        x = x - 1; 
+                } else {
+                        x = x + 1; 
+                } ;
+                a = a + 1; 
+        } ;
+        return p(a,y); 
+} 
+var f = myfun(y);
+write( f(6,7) ) ;
+""" 
+
+jstext10 = """
+        while (x < y && (x < 10)) {
+                if (! (x < y)) {
+                        x = x - 1; 
+                } else {
+                        x = x + 1; 
+                } ;
+                a = a + 1; 
+        };
+"""
+
+print ("debug");
+jq = [('stmt', ('var', 'a', ('number', 1.0))), ('stmt', ('var', 'x', ('number', 2.0))), ('stmt', ('var', 'y', ('number', 2.0))), ('function', 'myfun', ['x'], [('var', 'a', ('number', 3.0)), ('assign', 'x', ('binop', ('identifier', 'x'), '+', ('identifier', 'y'))), ('assign', 'y', ('binop', ('identifier', 'x'), '+', ('identifier', 'y'))), ('var', 'p', ('function', ['y', 'z'], [('var', 'q', ('function', ['x', 'z'], [('return', ('binop', ('identifier', 'x'), '+', ('binop', ('binop', ('identifier', 'a'), '*', ('identifier', 'y')), '/', ('identifier', 'z'))))])), ('return', ('identifier', 'q'))])), ('while', ('binop', ('binop', ('identifier', 'x'), '<', ('identifier', 'y')), '&&', ('binop', ('identifier', 'x'), '<', ('number', 10.0))), [('if-then-else', ('not', ('binop', ('identifier', 'x'), '<', ('identifier', 'y'))), [('assign', 'x', ('binop', ('identifier', 'x'), '-', ('number', 1.0)))], [('assign', 'x', ('binop', ('identifier', 'x'), '+', ('number', 1.0)))]), ('assign', 'a', ('binop', ('identifier', 'a'), '+', ('number', 1.0)))]), ('return', ('call', 'p', [('identifier', 'a'), ('identifier', 'y')]))]), ('stmt', ('var', 'f', ('call', 'myfun', [('identifier', 'y')]))), ('stmt', ('exp', ('call', 'write', [('call', 'f', [('number', 6.0), ('number', 7.0)])])))]
+print test_parser(jstext9);
