@@ -20,7 +20,9 @@ def eval_stmt(tree, environment):
         variable_name = tree[1];
         right_child = tree[2];
         new_value = eval_exp(right_child, environment);
-        env_update(environment, variable_name, new_value);
+        print "assign stmt ", tree;
+        print "assign new_value %f to variable %s" % (new_value, variable_name);
+        env_update(variable_name, new_value, environment);
     elif stmttype == "if-then-else": # if x < 5 then A;B; else C;D;
         print (stmttype);
         conditional_exp = tree[1] # x < 5
@@ -202,7 +204,7 @@ def eval_elt(elt, env):
 def interpret(ast):
     global_environment = (None, {"javascript output" : ""});
     for element in ast:
-        print "element is : ", element;
+        print "element is ------- : ", element;
         eval_elt(element, global_environment);
         for env_key in global_environment[1]:
             print "Global Env : [%s] " % env_key,
@@ -222,7 +224,9 @@ def interpret(ast):
 #print optimize(("binop",("number","5"),"+",("number","0"))) == ("number","5");
 #print optimize(("binop",("number","5"),"+",("binop",("number","5"),"*",("number","0"))))
 
-jsf = [('function', 'tvtropes', ['tgwtg'], [('var', 'theonion', ('binop', ('string', 'reddit'), '+', ('string', 'pennyarcade'))), ('var', 'loadingreadyrun', ('function', ['extracredits'], [('exp', ('call', 'write', [('identifier', 'tgwtg')])), ('exp', ('call', 'write', [('string', ' ')])), ('exp', ('call', 'write', [('identifier', 'theonion')])), ('exp', ('call', 'write', [('string', ' ')])), ('exp', ('call', 'write', [('identifier', 'extracredits')]))])), ('return', ('identifier', 'loadingreadyrun'))]), ('stmt', ('var', 'yudkowsky', ('call', 'tvtropes', [('number', 3.0)]))), ('stmt', ('var', 'tgwtg', ('number', 888.0))), ('stmt', ('var', 'extracredits', ('number', 999.0))), ('stmt', ('exp', ('call', 'yudkowsky', [('number', 4.0)])))];
+#jsf = [('function', 'tvtropes', ['tgwtg'], [('var', 'theonion', ('binop', ('string', 'reddit'), '+', ('string', 'pennyarcade'))), ('var', 'loadingreadyrun', ('function', ['extracredits'], [('exp', ('call', 'write', [('identifier', 'tgwtg')])), ('exp', ('call', 'write', [('string', ' ')])), ('exp', ('call', 'write', [('identifier', 'theonion')])), ('exp', ('call', 'write', [('string', ' ')])), ('exp', ('call', 'write', [('identifier', 'extracredits')]))])), ('return', ('identifier', 'loadingreadyrun'))]), ('stmt', ('var', 'yudkowsky', ('call', 'tvtropes', [('number', 3.0)]))), ('stmt', ('var', 'tgwtg', ('number', 888.0))), ('stmt', ('var', 'extracredits', ('number', 999.0))), ('stmt', ('exp', ('call', 'yudkowsky', [('number', 4.0)])))];
+
+jsf = [('stmt', ('var', 'a', ('number', 1.0))), ('stmt', ('var', 'x', ('number', 2.0))), ('stmt', ('var', 'y', ('number', 2.0))), ('function', 'myfun', ['x'], [('var', 'a', ('number', 3.0)), ('assign', 'x', ('binop', ('identifier', 'x'), '+', ('identifier', 'y'))), ('assign', 'y', ('binop', ('identifier', 'x'), '+', ('identifier', 'y'))), ('var', 'p', ('function', ['y', 'z'], [('var', 'q', ('function', ['x', 'z'], [('return', ('binop', ('identifier', 'x'), '+', ('binop', ('binop', ('identifier', 'a'), '*', ('identifier', 'y')), '/', ('identifier', 'z'))))])), ('return', ('identifier', 'q'))])), ('while', ('binop', ('binop', ('identifier', 'x'), '<', ('identifier', 'y')), '&&', ('binop', ('identifier', 'x'), '<', ('number', 10.0))), [('if-then-else', ('not', ('binop', ('identifier', 'x'), '<', ('identifier', 'y'))), [('assign', 'x', ('binop', ('identifier', 'x'), '-', ('number', 1.0)))], [('assign', 'x', ('binop', ('identifier', 'x'), '+', ('number', 1.0)))]), ('assign', 'a', ('binop', ('identifier', 'a'), '+', ('number', 1.0)))]), ('return', ('call', 'p', [('identifier', 'a'), ('identifier', 'y')]))]), ('stmt', ('var', 'f', ('call', 'myfun', [('identifier', 'y')]))), ('stmt', ('exp', ('call', 'write', [('call', 'f', [('number', 6.0), ('number', 7.0)])])))]
 
 #jsf = [('function', 'foo', ['ax'], [('var', 'inside', ('function', ['ax'], [('exp', ('call', 'write', [('identifier', 'ax')]))])), ('return', ('identifier', 'inside'))]), ('stmt', ('var', 'ya', ('call', 'foo', [('number', 3.0)]))), ('stmt', ('exp', ('call', 'ya', [('number', 9.0)])))]
 
