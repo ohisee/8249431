@@ -1,0 +1,28 @@
+{% extends "wiki-base.html" %}
+{% block title %}Wiki{% endblock %}
+{% block content %}
+
+	<div class="login-area">
+		<div class='control-area'>
+			{{username}}
+			&#40;<a class="login-link" href={{logout_link}}>logout</a>&#41;
+		</div>
+		{% if wiki_text %}
+			<div class='control-area'>
+				<a class="login-link" href={{ev_link}}>view</a>
+				|
+				<a class="login-link" href={{history}}>history</a>
+			</div>
+		{% endif %}
+	</div>
+		
+	<div class="wiki-content">
+		<form method="post">
+			<textarea name="content">{{wiki_text}}</textarea>
+			<br/>
+			<br/>
+			<input type="submit" name="Save" value="Save"/>
+		</form>
+	</div>
+	
+{% endblock %}

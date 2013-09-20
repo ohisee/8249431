@@ -1,0 +1,34 @@
+{% extends "wiki-base.html" %}
+{% block title %}Wiki{% endblock %}
+{% block content %}
+
+	{% if loggedin %}
+		<div class="login-area">
+			<div class='control-area'>
+				{{username}}
+				&#40;<a class="login-link" href={{logout_link}}>logout</a>&#41;
+			</div>
+			<div class='control-area'>
+				<a class="login-link" href={{ev_link}}>{{ev}}</a>
+				|
+				<a class="login-link" href={{history}}>history</a>
+			</div>
+		</div>
+	{% else %}
+		<div class="login-area">
+			<div class='control-area'>
+				<a class="login-link" href={{login_link}}>login</a>
+				|
+				<a class="login-link" href={{signup_link}}>signup</a>
+			</div>
+			<div class='control-area'>
+				<a class="login-link" href={{history}}>history</a>
+			</div>
+		</div>
+	{% endif %}
+
+	<div class="wiki-content">
+		{{wiki_text | safe}}
+	</div>
+	
+{% endblock %}

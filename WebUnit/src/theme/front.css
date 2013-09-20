@@ -1,0 +1,26 @@
+@CHARSET "UTF-8";
+
+html {
+	height: 100%;
+}
+
+body {
+	position: relative;
+	font-family: Helvetica, Arial, sans-serif, serif;
+}
+
+label {
+	display: block; 
+	font-size: 20px;
+}
+
+label+label {
+	margin-top: 20px;
+}
+
+p {
+	font-size: 12px;
+}
+
+.map {position: absolute; top: 50px; left: 180px;}
+.age {position: inherit; bottom: 0px; right: 0px; color: gray;}

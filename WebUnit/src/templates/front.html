@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="UTF-8">
+    <title>Welcome</title>
+    <link type="text/css" rel="stylesheet" href="/theme/front.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript" src="/script/min.js"></script>
+  </head>
+
+  <body>
+    <h2>/Address/</h2>
+    
+    <table>
+    	<tr>
+    		<td><label><p></p></label></td>
+	    </tr>
+	    <tr>
+    		<td>
+    			<input type="text" name="subject" value="{{subject}}"/>
+    			<br/>
+    			<br/><input type="submit" value="Submit" name="Submit" id="initbutton">
+		    </td>
+	    </tr>
+    </table>
+
+	{% if image_url %}
+    	<img class="map" id="imap" alt="geo" src="{{image_url}}"/>
+    {% endif %}
+    
+    <div class="feed"></div>
+  </body>
+</html>
