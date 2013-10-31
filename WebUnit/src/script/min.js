@@ -10,6 +10,7 @@ $(document).ready(function () {
 		$.getJSON("/news", function (data) {
 			$("h2").text("NY Times News Feed");
 			$("#imap").hide();
+			$("div.feed").empty();
 			$("div.feed").addClass("map");
 			$.each(data.items, function () {
 				$("div.feed").append("<p>" + this['title'] + "</p>");
