@@ -9,8 +9,15 @@ def countdown(n):
         y = y + 1;
     print y;
 
-def time(n):
+def time_countdown(n):
     steps = math.ceil(n / 5.0) * 2 + 3;
     return steps;
 
-print countdown(50);
+def naive(a, b):
+    x = a
+    y = b
+    z = 0
+    while x > 0:
+        z = z + y
+        x = x - 1
+    return z
