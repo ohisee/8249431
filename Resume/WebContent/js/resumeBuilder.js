@@ -18,38 +18,51 @@ var bio = {
 	"message" : "Welcome",
 	"skills" : [ "Application Design", "Software Developement" ],
 	"work" : {
-		"position" : "Software Developer",
-		"employer" : "Org",
-		"start" : "July 1st",
-		"dates" : "July 1 to Present",
-		"description" : "Software Developer"
+		"jobs" : [ {
+			"position" : "Software Developer",
+			"employer" : "Org",
+			"start" : "July 1st",
+			"dates" : "July 1 to Present",
+			"description" : "Software Developer",
+			"location" : "Sunnyvale, Ca"
+		} ]
 	},
 	"education" : {
-		"start" : "July 1st",
-		"name" : "CSU",
-		"degree" : "BS",
-		"major" : "CS",
-		"location" : "SF"
+		"schools" : [ {
+			"start" : "July 1st",
+			"name" : "CSU",
+			"degree" : "BS",
+			"major" : "CS",
+			"location" : "San Francisco, Ca"
+		} ]
+	},
+	"contacts" : {
+		"location" : "Hong Kong, China"
 	},
 	"project" : {
-		
+
 	}
 };
 
 var work = {
-	"position" : "Software Developer",
-	"employer" : "Org",
-	"start" : "July 1st",
-	"dates" : "July 1 to Present",
-	"description" : "Software Developer"
+	"jobs" : [ {
+		"position" : "Software Developer",
+		"employer" : "Org",
+		"start" : "July 1st",
+		"dates" : "July 1 to Present",
+		"description" : "Software Developer",
+		"location" : "Sunnyvale, Ca"
+	} ]
 };
 
 var education = {
-	"start" : "July 1st",
-	"name" : "CSU",
-	"degree" : "BS",
-	"major" : "CS",
-	"location" : "SF"
+	"schools" : [ {
+		"start" : "July 1st",
+		"name" : "CSU",
+		"degree" : "BS",
+		"major" : "CS",
+		"location" : "San Francisco, Ca"
+	} ]
 };
 
 var formattedName = HTMLheaderName.replace("%data%", bio.name);
@@ -71,6 +84,8 @@ $("#education").append(HTMLschoolStart);
 $("#education").append(HTMLschoolName.replace("%data%", education.name));
 $("#education").append(HTMLschoolMajor.replace("%data%", education.major));
 
+$("#mapDiv").append(googleMap);
+
 $(document).click(function (loc) {
 	logClicks(loc.pageX, loc.pageY);
 });
@@ -86,5 +101,3 @@ $("#main").append(internationalizeButton);
 project.display = function() {
 	$("#projects").append(HTMLprojectStart);
 };
-
-$("#mapDiv").append(googleMap);
