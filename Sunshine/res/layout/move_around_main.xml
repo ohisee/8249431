@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/touch_selector"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+
+<!--     <ImageView
+        android:id="@+id/imageTouch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/hardcode_button_description"
+        android:padding="30dp"
+        android:src="@drawable/play" /> -->
+    
+    <!-- android:layout_gravity="center_horizontal" -->
+    
+    <!-- For housing an image file -->
+    <FrameLayout
+        android:id="@+id/imageMovableHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:background="@drawable/play">
+    </FrameLayout>
+    
+    <com.example.android.sunshine.app.PieView
+        android:id="@+id/image_pie_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/sunshine_blue" />
+
+</LinearLayout>
